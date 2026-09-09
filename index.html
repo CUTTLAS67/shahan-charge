@@ -48,6 +48,21 @@
     color:#efe9d8;
     margin-bottom:26px;
   }
+  .shahan-logo{
+    display:block;
+    width:min(220px,62vw);
+    height:auto;
+    max-height:130px;
+    object-fit:contain;
+    margin:0 auto 14px;
+    filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));
+  }
+  .date-sort-note{
+    margin:0 0 10px;
+    text-align:right;
+    font-size:10px;
+    color:var(--ink-soft);
+  }
   .cover-title .eyebrow{
     display:block;
     font-size:13px;
@@ -426,6 +441,24 @@
   .edit-mode{display:none;background:#f4e9d2;border:1px solid var(--brass);border-radius:5px;padding:8px 10px;margin-bottom:12px;font-size:12px;color:var(--brass-deep);align-items:center;justify-content:space-between;gap:8px}
   .edit-mode.show{display:flex}
   .edit-cancel{border:0;background:transparent;color:var(--withdraw);font-family:'Vazirmatn';cursor:pointer;font-size:11px}
+
+  .cloud-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#e8efe9;border:1px solid #c7d7cc;border-radius:7px;padding:9px 11px;margin-bottom:16px;font-size:11px;color:#365344;}
+  .cloud-bar strong{font-size:12px;}
+  #cloud-status{color:#6a776f;margin-right:4px;}
+  .cloud-actions{display:flex;gap:6px;}
+  .cloud-btn{border:1px solid #b8c9bd;background:#fbf8ef;color:#365344;border-radius:5px;padding:6px 9px;font-family:'Vazirmatn';font-size:11px;cursor:pointer;}
+  .cloud-btn:hover{border-color:var(--brass);}
+  .auth-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.58);backdrop-filter:blur(3px)}
+  .auth-modal.show{display:flex}
+  .auth-card{width:min(390px,100%);background:#fbf8ef;border:1px solid var(--paper-line);border-radius:10px;padding:18px;box-shadow:0 25px 70px rgba(0,0,0,.4)}
+  .auth-title{font-size:18px;font-weight:800;margin-bottom:6px;color:var(--ink)}
+  .auth-note{font-size:12px;line-height:1.8;color:var(--ink-soft);margin-bottom:12px}
+  .auth-card input{margin-bottom:9px}
+  .auth-actions{display:flex;gap:8px;margin-top:4px}
+  .auth-actions>*{flex:1}
+  .auth-error{font-size:11px;color:var(--withdraw);margin-top:8px;min-height:16px;line-height:1.7}
+  .sync-badge{font-size:10px;padding:2px 6px;border-radius:10px;background:#e4efe8;color:var(--deposit);}
+  @media(max-width:520px){.cloud-bar{align-items:flex-start;flex-direction:column}.cloud-actions{width:100%}.cloud-btn{flex:1}}
   @media(max-width:520px){.dashboard{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.entry{padding:10px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 6px}}
 </style>
 </head>
@@ -433,6 +466,7 @@
 <div class="wrap">
 
   <div class="cover-title">
+    <img class="shahan-logo" src="shahan-logo.png" alt="لوگوی شاهان">
     <span class="eyebrow">دفتر حساب</span>
     <h1>شارژ ساختمان شاهان</h1>
     <div class="sub">ثبت واریز و برداشت واحدها</div>
@@ -440,6 +474,14 @@
 
   <div class="book">
     <div class="book-inner">
+
+      <div class="cloud-bar" id="cloud-bar">
+        <div>☁️ <strong>حساب آنلاین شاهان</strong><span id="cloud-status"> در حال بررسی...</span></div>
+        <div class="cloud-actions">
+          <button type="button" id="login-btn" class="cloud-btn">ورود مدیر</button>
+          <button type="button" id="logout-btn" class="cloud-btn" style="display:none">خروج</button>
+        </div>
+      </div>
 
       <p class="section-label">ثبت تراکنش جدید</p>
 
@@ -548,6 +590,7 @@
         <span class="search-icon">🔎</span>
         <input type="search" id="search-input" placeholder="جستجو در توضیحات، واحد یا مبلغ...">
       </div>
+      <p class="date-sort-note">مرتب‌سازی تراکنش‌ها: جدیدترین تاریخ شمسی در بالا</p>
 
       <div class="report-box" id="report-box">
         <div class="report-head"><strong>خلاصه وضعیت واحدها</strong><span class="edit-badge" id="report-period">همه</span></div>
@@ -564,11 +607,22 @@
         <div class="empty">در حال بارگذاری...</div>
       </div>
 
-      <div class="device-note">اطلاعات و تصاویر رسید فعلاً فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود. برای جلوگیری از از دست رفتن اطلاعات، از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
+      <div class="device-note" id="device-note">در حالت آنلاین، اطلاعات و رسیدها روی پایگاه داده امن ذخیره می‌شوند و از هر دستگاه قابل دسترسی‌اند. در حالت آفلاین، اطلاعات روی همین مرورگر نگهداری می‌شود.</div>
 
     </div>
   </div>
 
+</div>
+
+<div class="auth-modal" id="auth-modal" aria-hidden="true">
+  <div class="auth-card" role="dialog" aria-modal="true" aria-label="ورود مدیر">
+    <div class="auth-title">ورود مدیر</div>
+    <div class="auth-note">برای همگام‌سازی آنلاین، ایمیل و رمز مدیر را وارد کنید.</div>
+    <input type="email" id="auth-email" placeholder="ایمیل مدیر" autocomplete="username">
+    <input type="password" id="auth-password" placeholder="رمز عبور" autocomplete="current-password">
+    <div class="auth-actions"><button type="button" class="submit-btn" id="auth-submit">ورود</button><button type="button" class="modal-close" id="auth-close">بستن</button></div>
+    <div class="auth-error" id="auth-error"></div>
+  </div>
 </div>
 
 <div class="calendar-modal" id="calendar-modal" aria-hidden="true">
@@ -598,6 +652,8 @@
   </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
 <script>
 const PERSIAN_MONTHS = ["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
 const PERSIAN_DIGITS = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
@@ -848,62 +904,170 @@ receiptClear.addEventListener('click',clearReceipt);
 document.getElementById('type-deposit').addEventListener('change',updateReceiptVisibility);
 document.getElementById('type-withdraw').addEventListener('change',updateReceiptVisibility);
 
-// ---- Storage helpers ----
-// All data is saved locally on this device using the browser's localStorage.
-// Nothing is sent to any server.
+// ---- Storage: Supabase online + local fallback ----
 let entries = [];
 let editingId = null;
 let searchTerm = "";
 let receiptModal = document.getElementById('receipt-modal');
 let receiptModalImg = document.getElementById('receipt-modal-img');
+let remoteEnabled = !!(window.SHAHAN_SUPABASE && window.SHAHAN_SUPABASE.url && window.SHAHAN_SUPABASE.anonKey);
+let sb = null;
+let currentUser = null;
+const LOCAL_KEY = STORAGE_KEY;
 
-function saveEntries(){
-  try{
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
-    return true;
-  }catch(e){
-    console.error('storage error', e);
-    alert('حافظه مرورگر پر شده است. لطفاً از اطلاعات پشتیبان JSON بگیرید و رسیدهای خیلی بزرگ را حذف کنید.');
-    return false;
-  }
+if(remoteEnabled && window.supabase){
+  sb = window.supabase.createClient(window.SHAHAN_SUPABASE.url, window.SHAHAN_SUPABASE.anonKey);
 }
 
-function loadEntries(){
-  try{
-    const raw = localStorage.getItem(STORAGE_KEY);
-    entries = raw ? JSON.parse(raw) : [];
-    if(!Array.isArray(entries)) entries = [];
-  }catch(e){
-    entries = [];
+const cloudStatus = document.getElementById('cloud-status');
+const loginBtn = document.getElementById('login-btn');
+const logoutBtn = document.getElementById('logout-btn');
+const authModal = document.getElementById('auth-modal');
+const authEmail = document.getElementById('auth-email');
+const authPassword = document.getElementById('auth-password');
+const authSubmit = document.getElementById('auth-submit');
+const authClose = document.getElementById('auth-close');
+const authError = document.getElementById('auth-error');
+
+function setCloudStatus(text, ok=false){
+  cloudStatus.textContent = ' ' + text;
+  cloudStatus.style.color = ok ? 'var(--deposit)' : 'var(--ink-soft)';
+}
+function openAuth(){authError.textContent='';authModal.classList.add('show');authModal.setAttribute('aria-hidden','false');authEmail.focus();}
+function closeAuth(){authModal.classList.remove('show');authModal.setAttribute('aria-hidden','true');}
+loginBtn.addEventListener('click',openAuth); authClose.addEventListener('click',closeAuth);
+authModal.addEventListener('click',e=>{if(e.target===authModal)closeAuth();});
+
+function localSave(){
+  try{localStorage.setItem(LOCAL_KEY,JSON.stringify(entries));return true;}
+  catch(e){alert('حافظه مرورگر پر شده است. لطفاً نسخه JSON پشتیبان بگیرید.');return false;}
+}
+function localLoad(){
+  try{const raw=localStorage.getItem(LOCAL_KEY);entries=raw?JSON.parse(raw):[];if(!Array.isArray(entries))entries=[];}
+  catch(e){entries=[];}
+}
+function saveEntries(){ return localSave(); }
+function loadEntries(){ localLoad(); render(); }
+
+function normalizeRow(r){
+  return {id:r.id,day:r.day,month:r.month,year:r.year,unit:r.unit,amount:Number(r.amount),type:r.type,desc:r.desc||'',receipt:r.receipt_path||'',createdAt:r.created_at?new Date(r.created_at).getTime():Date.now(),updatedAt:r.updated_at?new Date(r.updated_at).getTime():Date.now()};
+}
+async function loadRemote(){
+  if(!sb || !currentUser){localLoad();render();return;}
+  const localSnapshot = (()=>{try{const raw=localStorage.getItem(LOCAL_KEY);const x=raw?JSON.parse(raw):[];return Array.isArray(x)?x:[];}catch(e){return [];}})();
+  const {data,error}=await sb.from('transactions').select('*').order('created_at',{ascending:false});
+  if(error){console.error(error);alert('دریافت اطلاعات آنلاین ناموفق بود: '+error.message);localLoad();render();return;}
+  const remoteRows=(data||[]).map(normalizeRow);
+  if(remoteRows.length===0 && localSnapshot.length>0){
+    const migrate=confirm(`در این مرورگر ${toPersianDigits(localSnapshot.length)} تراکنش قبلی پیدا شد. آنها را به حساب آنلاین منتقل کنم؟`);
+    if(migrate){
+      let ok=0;
+      for(const item of localSnapshot){
+        try{
+          const copy={...item,id:(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,8)),receipt:''};
+          if(item.receipt && String(item.receipt).startsWith('data:')) copy.receipt=await uploadReceiptRemote(item.receipt,copy.id);
+          const saved=await saveEntryRemote(copy); remoteRows.push(saved); ok++;
+        }catch(err){console.warn('migration',err);}
+      }
+      if(ok) localStorage.removeItem(LOCAL_KEY);
+      alert(`${toPersianDigits(ok)} تراکنش به حساب آنلاین منتقل شد.`);
+    }
   }
+  entries=remoteRows;
   render();
 }
+async function uploadReceiptRemote(dataUrl, entryId){
+  if(!sb || !currentUser || !dataUrl) return '';
+  const blob=await (await fetch(dataUrl)).blob();
+  const path=currentUser.id+'/'+entryId+'-'+Date.now()+'.jpg';
+  const {error}=await sb.storage.from('receipts').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+  if(error) throw error;
+  return path;
+}
+async function removeReceiptRemote(path){
+  if(!sb || !currentUser || !path) return;
+  const {error}=await sb.storage.from('receipts').remove([path]);
+  if(error) console.warn('receipt remove',error);
+}
+async function getReceiptUrl(path){
+  if(!path) return '';
+  if(!sb || !currentUser || path.startsWith('data:')) return path;
+  const {data,error}=await sb.storage.from('receipts').createSignedUrl(path,3600);
+  return error ? '' : (data?.signedUrl||'');
+}
+
+async function saveEntryRemote(entry){
+  const payload={id:entry.id,day:entry.day,month:entry.month,year:entry.year,unit:entry.unit,amount:entry.amount,type:entry.type,desc:entry.desc||'',receipt_path:entry.receipt||null,updated_at:new Date().toISOString(),created_at:new Date(entry.createdAt||Date.now()).toISOString()};
+  const {data,error}=await sb.from('transactions').upsert(payload).select().single();
+  if(error) throw error;
+  return normalizeRow(data);
+}
+async function deleteEntryRemote(entry){
+  if(entry.receipt) await removeReceiptRemote(entry.receipt);
+  const {error}=await sb.from('transactions').delete().eq('id',entry.id);
+  if(error) throw error;
+}
+
+async function initCloud(){
+  if(!remoteEnabled || !sb){setCloudStatus('حالت محلی');document.getElementById('device-note').textContent='حالت آنلاین هنوز تنظیم نشده است؛ اطلاعات فعلاً فقط روی همین مرورگر ذخیره می‌شود.';loadLocalAndRender();return;}
+  setCloudStatus('اتصال آنلاین فعال');
+  const {data:{session}}=await sb.auth.getSession();
+  await applySession(session);
+  sb.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>applySession(session),0);});
+}
+async function applySession(session){
+  currentUser=session?.user||null;
+  if(currentUser){
+    loginBtn.style.display='none';logoutBtn.style.display='inline-block';setCloudStatus('آنلاین · '+(currentUser.email||'مدیر'),true);document.getElementById('device-note').textContent='اطلاعات و رسیدها روی پایگاه داده آنلاین ذخیره می‌شوند و از هر دستگاه با ورود مدیر قابل دسترسی‌اند.';closeAuth();await loadRemote();
+  }else{
+    loginBtn.style.display='inline-block';logoutBtn.style.display='none';setCloudStatus('برای همگام‌سازی وارد شوید');entries=[];localLoad();render();
+  }
+}
+async function loadLocalAndRender(){localLoad();render();}
+
+logoutBtn.addEventListener('click',async()=>{if(sb)await sb.auth.signOut();});
+authSubmit.addEventListener('click',async()=>{
+  if(!sb)return;
+  authError.textContent='';
+  const email=authEmail.value.trim(), password=authPassword.value;
+  if(!email||!password){authError.textContent='ایمیل و رمز عبور را وارد کنید.';return;}
+  authSubmit.disabled=true;authSubmit.textContent='در حال ورود...';
+  const {error}=await sb.auth.signInWithPassword({email,password});
+  authSubmit.disabled=false;authSubmit.textContent='ورود';
+  if(error)authError.textContent='ورود ناموفق بود: '+error.message;
+});
+authPassword.addEventListener('keydown',e=>{if(e.key==='Enter')authSubmit.click();});
 
 // ---- Form submit / edit ----
-document.getElementById('entry-form').addEventListener('submit', function(e){
+document.getElementById('entry-form').addEventListener('submit', async function(e){
   e.preventDefault();
   let amount;
-  if(amountOther.checked){
-    amount = parseInt(customInput.value, 10);
-    if(!amount || amount <= 0){ customInput.focus(); return; }
-  } else amount = 400000;
-
-  const type = document.querySelector('input[name="f-type"]:checked').value;
-  const unit = unitEl.value;
-  const day = dayEl.value, month = monthEl.value, year = yearEl.value;
-  const desc = document.getElementById('f-desc').value.trim();
-  const old = editingId ? entries.find(en => en.id === editingId) : null;
-  const entry = {
-    id: editingId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6)),
-    day: parseInt(day,10), month: parseInt(month,10), year: parseInt(year,10),
-    unit: parseInt(unit,10), amount, type, desc,
-    receipt: receiptData || (old ? old.receipt || '' : ''),
-    createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
-  };
-  if(editingId){ entries = entries.map(en => en.id === editingId ? entry : en); }
-  else entries.push(entry);
-  if(!saveEntries()) return;
-  resetForm(); render();
+  if(amountOther.checked){amount=parseInt(customInput.value,10);if(!amount||amount<=0){customInput.focus();return;}}
+  else amount=400000;
+  const type=document.querySelector('input[name="f-type"]:checked').value;
+  const unit=unitEl.value;
+  const day=dayEl.value, month=monthEl.value, year=yearEl.value;
+  const desc=document.getElementById('f-desc').value.trim();
+  const old=editingId?entries.find(en=>en.id===editingId):null;
+  const id=editingId || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2,8));
+  const entry={id,day:parseInt(day,10),month:parseInt(month,10),year:parseInt(year,10),unit:parseInt(unit,10),amount,type,desc,receipt:old?old.receipt||'':'',createdAt:old?old.createdAt:Date.now(),updatedAt:Date.now()};
+  const submit=document.getElementById('submit-btn'); submit.disabled=true; const oldText=submit.textContent; submit.textContent=currentUser?'در حال ذخیره...':'در حال ثبت...';
+  try{
+    if(currentUser){
+      if(receiptData && receiptData.startsWith('data:')){
+        entry.receipt=await uploadReceiptRemote(receiptData,id);
+        if(old?.receipt && old.receipt !== entry.receipt) await removeReceiptRemote(old.receipt);
+      } else if(!receiptData && old?.receipt){entry.receipt=old.receipt;}
+      const saved=await saveEntryRemote(entry);
+      entries=editingId?entries.map(en=>en.id===editingId?saved:en):[saved,...entries];
+    }else{
+      entry.receipt=receiptData || (old?old.receipt||'':'');
+      if(editingId)entries=entries.map(en=>en.id===editingId?entry:en);else entries.push(entry);
+      if(!localSave())return;
+    }
+    resetForm();render();
+  }catch(err){console.error(err);alert('ذخیره تراکنش ناموفق بود: '+(err.message||err));}
+  finally{submit.disabled=false;submit.textContent=editingId?oldText:'ثبت تراکنش';}
 });
 
 function resetForm(){
@@ -919,38 +1083,28 @@ function resetForm(){
   document.getElementById('submit-btn').textContent='ثبت تراکنش';
 }
 
-function startEdit(id){
+async function startEdit(id){
   const en=entries.find(x=>x.id===id); if(!en)return;
-  editingId=id;
-  setSelectedDate({day:en.day,month:en.month,year:en.year});
-  unitEl.value=String(en.unit);
-  if(en.amount===400000){amountFixed.checked=true; amountOther.checked=false;}else{amountFixed.checked=false; amountOther.checked=true; customInput.value=en.amount;}
-  updateAmountBox();
-  document.querySelector(`input[name="f-type"][value="${en.type}"]`).checked=true;
-  updateReceiptVisibility();
+  editingId=id; dayEl.value=en.day;monthEl.value=en.month;yearEl.value=en.year;selectedDateLabel.textContent=`${toPersianDigits(en.day)} ${PERSIAN_MONTHS[en.month-1]} ${toPersianDigits(en.year)}`;
+  unitEl.value=en.unit;
+  if([400000].includes(en.amount)){amountFixed.checked=true;customInput.value='';}else{amountOther.checked=true;customInput.value=en.amount;}
+  updateAmountBox(); document.getElementById('type-'+en.type).checked=true; updateReceiptVisibility();
   document.getElementById('f-desc').value=en.desc||'';
-  receiptData=en.receipt||'';
-  if(receiptData){receiptPreviewImg.src=receiptData;receiptPreview.classList.add('show');receiptName.textContent='رسید قبلی';}
-  document.getElementById('edit-mode').classList.add('show');
-  document.getElementById('submit-btn').textContent='ذخیره تغییرات';
-  document.getElementById('entry-form').scrollIntoView({behavior:'smooth',block:'start'});
+  receiptData=''; receiptInput.value=''; receiptPreview.classList.remove('show');
+  if(en.receipt){
+    const url=await getReceiptUrl(en.receipt); if(url){receiptPreviewImg.src=url;receiptPreview.classList.add('show');receiptName.textContent='رسید قبلی';}
+  }
+  document.getElementById('edit-mode').classList.add('show');document.getElementById('submit-btn').textContent='ذخیره تغییرات';document.getElementById('entry-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+async function deleteEntry(id){
+  const en=entries.find(x=>x.id===id);if(!en)return;
+  if(!confirm('این تراکنش حذف شود؟'))return;
+  try{
+    if(currentUser){await deleteEntryRemote(en);entries=entries.filter(x=>x.id!==id);}else{entries=entries.filter(x=>x.id!==id);localSave();}
+    render();
+  }catch(err){alert('حذف ناموفق بود: '+(err.message||err));}
 }
 
-document.getElementById('edit-cancel').addEventListener('click',resetForm);
-
-// ---- Delete / edit actions ----
-function deleteEntry(id){
-  const en=entries.find(x=>x.id===id); if(!en)return;
-  if(!confirm(`تراکنش واحد ${toPersianDigits(en.unit)} به مبلغ ${formatAmount(en.amount)} حذف شود؟`)) return;
-  entries = entries.filter(x=>x.id!==id);
-  saveEntries();
-  if(editingId===id) resetForm();
-  render();
-}
-
-filterUnitEl.addEventListener('change', render);
-
-// ---- Filters / report / render ----
 const monthFilter=document.getElementById('filter-month');
 const searchInput=document.getElementById('search-input');
 for(let m=1;m<=12;m++){
@@ -986,6 +1140,18 @@ function renderReport(){
   reportBody.innerHTML=rows.length?rows.join(''):'<tr><td colspan="4">اطلاعاتی برای نمایش وجود ندارد.</td></tr>';
 }
 
+function entryDateKey(en){
+  return (Number(en.year)||0)*10000 + (Number(en.month)||0)*100 + (Number(en.day)||0);
+}
+
+function sortByTransactionDate(list){
+  return [...list].sort((a,b)=>{
+    const dateDiff=entryDateKey(b)-entryDateKey(a);
+    if(dateDiff!==0) return dateDiff;
+    return (Number(b.createdAt)||0)-(Number(a.createdAt)||0);
+  });
+}
+
 function render(){
   const filtered=entries.filter(entryMatches);
   let sumDeposit=0,sumWithdraw=0;
@@ -999,7 +1165,7 @@ function render(){
 
   const listEl=document.getElementById('entries-list'); listEl.innerHTML='';
   if(!filtered.length){listEl.innerHTML='<div class="empty">تراکنشی با این فیلتر پیدا نشد.</div>';return;}
-  [...filtered].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).forEach(en=>{
+  sortByTransactionDate(filtered).forEach(en=>{
     const div=document.createElement('div'); div.className='entry';
     const dateStr=toPersianDigits(en.day)+' '+PERSIAN_MONTHS[en.month-1]+' '+toPersianDigits(en.year);
     div.innerHTML=`
@@ -1013,7 +1179,7 @@ function render(){
   });
   listEl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteEntry(b.dataset.del)));
   listEl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEdit(b.dataset.edit)));
-  listEl.querySelectorAll('[data-receipt]').forEach(b=>b.addEventListener('click',()=>openReceipt(b.dataset.receipt)));
+  listEl.querySelectorAll('[data-receipt]').forEach(b=>b.addEventListener('click',async()=>{const url=await getReceiptUrl(b.dataset.receipt);if(url)openReceipt(url);else alert('رسید قابل دریافت نیست.');}));
 }
 
 function openReceipt(data){receiptModalImg.src=data;receiptModal.classList.add('show');receiptModal.setAttribute('aria-hidden','false');}
@@ -1062,7 +1228,7 @@ function htmlEscape(value){
 
 function exportExcel(){
   const rows = [['تاریخ','واحد','مبلغ (تومان)','نوع','توضیحات','رسید']];
-  [...entries].reverse().forEach(en => {
+  sortByTransactionDate(entries).forEach(en => {
     rows.push([
       `${en.day}/${en.month}/${en.year}`,
       'واحد ' + en.unit,
@@ -1121,30 +1287,26 @@ document.getElementById('export-json-btn').addEventListener('click', () => {
   );
 });
 
-document.getElementById('import-file').addEventListener('change', function(e){
-  const file = e.target.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = function(evt){
+document.getElementById('import-file').addEventListener('change', async function(e){
+  const file=e.target.files[0]; if(!file)return;
+  const reader=new FileReader();
+  reader.onload=async function(evt){
     try{
-      const imported = JSON.parse(evt.target.result);
-      if(!Array.isArray(imported)) throw new Error('invalid format');
-      const existingIds = new Set(entries.map(en => en.id));
-      let added = 0;
-      imported.forEach(en => {
-        if(en && en.id && !existingIds.has(en.id)){
-          entries.push({...en, amount:Number(en.amount)||0, unit:Number(en.unit)||0});
-          existingIds.add(en.id);
-          added++;
-        }
-      });
-      saveEntries();
-      render();
-      alert(`${toPersianDigits(added)} تراکنش از فایل پشتیبان اضافه شد.`);
-    }catch(err){
-      alert('این فایل با فرمت JSON پشتیبان قبلی سازگار نیست.');
-    }
-    e.target.value = '';
+      const imported=JSON.parse(evt.target.result); if(!Array.isArray(imported))throw new Error('invalid format');
+      const existingIds=new Set(entries.map(en=>en.id)); let added=0;
+      for(const en of imported){
+        if(!(en&&en.id&&!existingIds.has(en.id)))continue;
+        const item={...en,id:en.id,amount:Number(en.amount)||0,unit:Number(en.unit)||0};
+        if(currentUser){
+          if(item.receipt && String(item.receipt).startsWith('data:')) item.receipt=await uploadReceiptRemote(item.receipt,item.id);
+          const saved=await saveEntryRemote(item); entries.push(saved);
+        }else{entries.push(item);}
+        existingIds.add(item.id);added++;
+      }
+      if(!currentUser)saveEntries();
+      render(); alert(`${toPersianDigits(added)} تراکنش از فایل پشتیبان اضافه شد.`);
+    }catch(err){console.error(err);alert('بازیابی فایل ناموفق بود: '+(err.message||'فرمت JSON نامعتبر است.'));}
+    e.target.value='';
   };
   reader.readAsText(file);
 });
@@ -1159,6 +1321,7 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js').catch(() => {});
   });
 }
+initCloud();
 </script>
 </body>
 </html>

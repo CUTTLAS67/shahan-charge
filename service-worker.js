@@ -1,9 +1,10 @@
-const CACHE_NAME = 'shahan-charge-v2';
+const CACHE_NAME = 'shahan-charge-v3';
 const ASSETS = [
   './index.html',
   './manifest.json',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './shahan-logo.png'
 ];
 
 self.addEventListener('install', (event) => {
