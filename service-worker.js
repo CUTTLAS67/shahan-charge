@@ -1,4 +1,4 @@
-const CACHE_NAME = 'shahan-charge-v1';
+const CACHE_NAME = 'shahan-charge-v2';
 const ASSETS = [
   './index.html',
   './manifest.json',

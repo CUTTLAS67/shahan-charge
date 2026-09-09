@@ -103,6 +103,24 @@
   }
 
   .date-row{ display:flex; gap:8px; }
+  .date-picker-trigger{
+    width:100%;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    font-family:'Vazirmatn',sans-serif;
+    background:#fbf8ef;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:11px 12px;
+    font-size:15px;
+    color:var(--ink);
+    cursor:pointer;
+    text-align:right;
+  }
+  .date-picker-trigger:hover{ border-color:var(--brass); }
+  .date-picker-icon{font-size:18px;line-height:1;}
   select, input[type="number"], input[type="text"], textarea{
     font-family:'Vazirmatn', sans-serif;
     background:#fbf8ef;
@@ -121,6 +139,67 @@
   .date-row select{ flex:1; }
 
   .unit-select{ max-width:180px; }
+
+  /* Persian calendar */
+  .calendar-modal{
+    position:fixed; inset:0; z-index:1000;
+    display:none; align-items:center; justify-content:center;
+    padding:16px; background:rgba(0,0,0,.55);
+    backdrop-filter:blur(3px);
+  }
+  .calendar-modal.show{display:flex;}
+  .calendar{
+    width:min(420px,100%); background:#fbf8ef; color:var(--ink);
+    border:1px solid var(--paper-line); border-radius:10px;
+    box-shadow:0 25px 70px rgba(0,0,0,.35); overflow:hidden;
+  }
+  .calendar-head{
+    background:var(--cover); color:#f4efdf; padding:14px 16px;
+  }
+  .calendar-head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+  .calendar-head-title{font-weight:800;font-size:17px;}
+  .calendar-nav{
+    width:36px;height:36px;border:1px solid rgba(255,255,255,.18);
+    border-radius:6px;background:transparent;color:#f4efdf;font-size:20px;cursor:pointer;
+  }
+  .calendar-nav:hover{background:rgba(255,255,255,.08);}
+  .calendar-weekdays,.calendar-grid{
+    display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:10px 12px 0;
+  }
+  .calendar-weekdays div{text-align:center;font-size:11px;color:var(--ink-soft);font-weight:700;padding:4px 0;}
+  .calendar-grid{padding-top:4px;padding-bottom:12px;}
+  .calendar-day{
+    aspect-ratio:1;border:1px solid transparent;background:transparent;border-radius:6px;
+    font-family:'Vazirmatn',sans-serif;font-size:13px;cursor:pointer;color:var(--ink);
+  }
+  .calendar-day:hover{background:#f4e9d2;border-color:var(--brass);}
+  .calendar-day.selected{background:var(--brass-deep);color:#fff;border-color:var(--brass-deep);font-weight:800;}
+  .calendar-day.today{box-shadow:inset 0 0 0 1px var(--brass);font-weight:800;}
+  .calendar-day.empty{cursor:default;}
+  .calendar-footer{
+    border-top:1px solid var(--paper-line);padding:10px 12px;
+    display:flex;gap:8px;
+  }
+  .calendar-footer button{
+    flex:1;padding:9px;border-radius:6px;font-family:'Vazirmatn',sans-serif;
+    cursor:pointer;border:1px solid var(--paper-line);background:transparent;color:var(--ink-soft);
+  }
+  .calendar-footer .today-btn{border-color:var(--brass);color:var(--brass-deep);font-weight:700;}
+  .receipt-box{display:none;margin-top:10px;}
+  .receipt-box.show{display:block;}
+  .receipt-input{
+    width:100%;padding:10px;border:1px dashed var(--paper-line);border-radius:6px;
+    background:#fbf8ef;font-family:'Vazirmatn',sans-serif;font-size:13px;cursor:pointer;
+  }
+  .receipt-preview{display:none;margin-top:9px;align-items:center;gap:10px;}
+  .receipt-preview.show{display:flex;}
+  .receipt-preview img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--paper-line);}
+  .receipt-preview-text{font-size:12px;color:var(--ink-soft);line-height:1.8;}
+  .receipt-clear{border:0;background:transparent;color:var(--withdraw);font-family:'Vazirmatn';cursor:pointer;font-size:12px;}
+  .receipt-link{
+    display:inline-flex;align-items:center;gap:4px;margin-top:5px;
+    font-size:11px;color:var(--brass-deep);text-decoration:none;font-weight:700;
+  }
 
   .choice-row{
     display:flex;
@@ -334,11 +413,13 @@
       <form id="entry-form">
         <div class="field">
           <label class="field-title">تاریخ</label>
-          <div class="date-row">
-            <select id="f-day"></select>
-            <select id="f-month"></select>
-            <select id="f-year"></select>
-          </div>
+          <button type="button" class="date-picker-trigger" id="date-picker-trigger" aria-label="انتخاب تاریخ">
+            <span id="selected-date-label"></span>
+            <span class="date-picker-icon">📅</span>
+          </button>
+          <input type="hidden" id="f-day">
+          <input type="hidden" id="f-month">
+          <input type="hidden" id="f-year">
         </div>
 
         <div class="field">
@@ -385,6 +466,18 @@
           <textarea id="f-desc" placeholder="مثلاً: بابت شارژ مرداد ماه..."></textarea>
         </div>
 
+        <div class="field receipt-box" id="receipt-box">
+          <label class="field-title" for="f-receipt">رسید پرداخت</label>
+          <input class="receipt-input" type="file" id="f-receipt" accept="image/*">
+          <div class="receipt-preview" id="receipt-preview">
+            <img id="receipt-preview-img" alt="پیش‌نمایش رسید">
+            <div class="receipt-preview-text">
+              <div id="receipt-name">رسید انتخاب شد</div>
+              <button type="button" class="receipt-clear" id="receipt-clear">حذف رسید</button>
+            </div>
+          </div>
+        </div>
+
         <button type="submit" class="submit-btn">ثبت تراکنش</button>
       </form>
 
@@ -422,11 +515,31 @@
         <div class="empty">در حال بارگذاری...</div>
       </div>
 
-      <div class="device-note">اطلاعات فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود (بدون سرور). اگر حافظه‌ی مرورگر پاک شود، اطلاعات از بین می‌رود؛ پس هر از گاهی از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
+      <div class="device-note">اطلاعات و تصاویر رسید فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود (بدون سرور). برای جلوگیری از از دست رفتن اطلاعات، هر از گاهی از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
 
     </div>
   </div>
 
+</div>
+
+<div class="calendar-modal" id="calendar-modal" aria-hidden="true">
+  <div class="calendar" role="dialog" aria-modal="true" aria-label="تقویم شمسی">
+    <div class="calendar-head">
+      <div class="calendar-head-row">
+        <button type="button" class="calendar-nav" id="calendar-prev" aria-label="ماه قبل">‹</button>
+        <div class="calendar-head-title" id="calendar-title"></div>
+        <button type="button" class="calendar-nav" id="calendar-next" aria-label="ماه بعد">›</button>
+      </div>
+    </div>
+    <div class="calendar-weekdays">
+      <div>ش</div><div>ی</div><div>د</div><div>س</div><div>چ</div><div>پ</div><div>ج</div>
+    </div>
+    <div class="calendar-grid" id="calendar-grid"></div>
+    <div class="calendar-footer">
+      <button type="button" class="today-btn" id="calendar-today">امروز</button>
+      <button type="button" id="calendar-close">بستن</button>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -449,33 +562,141 @@ function getTodayJalali(){
   return { day: obj.day, month: obj.month, year: obj.year };
 }
 
-// ---- Build date selects ----
+// ---- Persian calendar date picker ----
 const dayEl = document.getElementById('f-day');
 const monthEl = document.getElementById('f-month');
 const yearEl = document.getElementById('f-year');
+const dateTrigger = document.getElementById('date-picker-trigger');
+const selectedDateLabel = document.getElementById('selected-date-label');
+const calendarModal = document.getElementById('calendar-modal');
+const calendarGrid = document.getElementById('calendar-grid');
+const calendarTitle = document.getElementById('calendar-title');
 const today = getTodayJalali();
+let calendarView = {year: today.year, month: today.month};
 
-for(let d = 1; d <= 31; d++){
-  const opt = document.createElement('option');
-  opt.value = d;
-  opt.textContent = toPersianDigits(d);
-  if(d === today.day) opt.selected = true;
-  dayEl.appendChild(opt);
+function setSelectedDate(j){
+  dayEl.value = j.day;
+  monthEl.value = j.month;
+  yearEl.value = j.year;
+  selectedDateLabel.textContent = `${toPersianDigits(j.day)} ${PERSIAN_MONTHS[j.month-1]} ${toPersianDigits(j.year)}`;
 }
-PERSIAN_MONTHS.forEach((name, i) => {
-  const opt = document.createElement('option');
-  opt.value = i + 1;
-  opt.textContent = name;
-  if(i + 1 === today.month) opt.selected = true;
-  monthEl.appendChild(opt);
+
+function jalaliIsLeapYear(jy){
+  return j2d(jy + 1, 1, 1) - j2d(jy, 1, 1) === 366;
+}
+function jalaliMonthDays(jy, jm){
+  if(jm <= 6) return 31;
+  if(jm <= 11) return 30;
+  return jalaliIsLeapYear(jy) ? 30 : 29;
+}
+function div(a,b){ return Math.floor(a/b); }
+function mod(a,b){ return a - Math.floor(a/b)*b; }
+
+// Accurate enough Jalaali conversion based on the standard 33-year/2820-year algorithm.
+function j2d(jy,jm,jd){
+  const epbase = jy - (jy >= 0 ? 474 : 473);
+  const epyear = 474 + mod(epbase,2820);
+  return jd + (jm <= 7 ? (jm-1)*31 : (jm-1)*30+6) +
+    div(epyear*682-110,2816) + (epyear-1)*365 + div(epbase,2820)*1029983 + (1948320-1);
+}
+function d2j(jdn){
+  const depoch = jdn - j2d(475,1,1);
+  const cycle = div(depoch,1029983);
+  const cyear = mod(depoch,1029983);
+  let ycycle;
+  if(cyear === 1029982){
+    ycycle = 2820;
+  }else{
+    const aux1 = div(cyear,366);
+    const aux2 = mod(cyear,366);
+    ycycle = div(2134*aux1 + 2816*aux2 + 2815,1028522) + aux1 + 1;
+  }
+  let jy = ycycle + 2820*cycle + 474;
+  if(jy <= 0) jy--;
+  const yday = jdn - j2d(jy,1,1) + 1;
+  const jm = yday <= 186 ? Math.ceil(yday/31) : Math.ceil((yday-6)/30);
+  const jd = jdn - j2d(jy,jm,1) + 1;
+  return {year:jy,month:jm,day:jd};
+}
+function gregorianToJalali(date){
+  const gy = date.getFullYear(), gm = date.getMonth()+1, gd = date.getDate();
+  const gdn = (1461*(gy + 4800 + div(gm-14,12)))/4
+    + (367*(gm - 2 - 12*div(gm-14,12)))/12
+    - (3*div(gy + 4900 + div(gm-14,12),100))/4 + gd - 32075;
+  return d2j(Math.floor(gdn));
+}
+function jalaliToGregorian(jy,jm,jd){
+  const jdn=j2d(jy,jm,jd);
+  let j=jdn+32044;
+  let g=div(j,146097);
+  let dg=mod(j,146097);
+  let c=div(dg,36524);
+  if(c===4)c=3;
+  let dc=dg-c*36524;
+  let b=div(dc,1461);
+  let db=mod(dc,1461);
+  let a=div(db,365);
+  if(a===4)a=3;
+  let da=db-a*365;
+  let gy=g*400+c*100+b*4+a-4800;
+  let doy=da;
+  let mp=div(5*doy+2,153);
+  let gd=doy-div(153*mp+2,5)+1;
+  let gm=mp+(mp<10?3:-9);
+  gy += gm<=2 ? 1 : 0;
+  return new Date(gy,gm-1,gd);
+}
+function jalaliDayOfWeek(jy,jm,jd){
+  // 0=Saturday ... 6=Friday
+  const g=jalaliToGregorian(jy,jm,jd);
+  return (g.getDay()+1)%7;
+}
+function renderCalendar(){
+  const y=calendarView.year, m=calendarView.month;
+  calendarTitle.textContent = `${PERSIAN_MONTHS[m-1]} ${toPersianDigits(y)}`;
+  calendarGrid.innerHTML='';
+  const firstDow=jalaliDayOfWeek(y,m,1);
+  for(let i=0;i<firstDow;i++){
+    const e=document.createElement('div'); e.className='calendar-day empty'; calendarGrid.appendChild(e);
+  }
+  const selected={day:+dayEl.value,month:+monthEl.value,year:+yearEl.value};
+  for(let d=1;d<=jalaliMonthDays(y,m);d++){
+    const b=document.createElement('button');
+    b.type='button'; b.className='calendar-day';
+    b.textContent=toPersianDigits(d);
+    if(d===today.day && m===today.month && y===today.year)b.classList.add('today');
+    if(d===selected.day && m===selected.month && y===selected.year)b.classList.add('selected');
+    b.addEventListener('click',()=>{
+      setSelectedDate({day:d,month:m,year:y});
+      closeCalendar();
+    });
+    calendarGrid.appendChild(b);
+  }
+}
+function openCalendar(){
+  calendarView={year:+yearEl.value||today.year,month:+monthEl.value||today.month};
+  renderCalendar();
+  calendarModal.classList.add('show');
+  calendarModal.setAttribute('aria-hidden','false');
+}
+function closeCalendar(){
+  calendarModal.classList.remove('show');
+  calendarModal.setAttribute('aria-hidden','true');
+}
+dateTrigger.addEventListener('click',openCalendar);
+document.getElementById('calendar-prev').addEventListener('click',()=>{
+  calendarView.month--; if(calendarView.month<1){calendarView.month=12;calendarView.year--;} renderCalendar();
 });
-for(let y = today.year - 3; y <= today.year + 1; y++){
-  const opt = document.createElement('option');
-  opt.value = y;
-  opt.textContent = toPersianDigits(y);
-  if(y === today.year) opt.selected = true;
-  yearEl.appendChild(opt);
-}
+document.getElementById('calendar-next').addEventListener('click',()=>{
+  calendarView.month++; if(calendarView.month>12){calendarView.month=1;calendarView.year++;} renderCalendar();
+});
+document.getElementById('calendar-today').addEventListener('click',()=>{
+  setSelectedDate(today); calendarView={year:today.year,month:today.month}; renderCalendar();
+});
+document.getElementById('calendar-close').addEventListener('click',closeCalendar);
+calendarModal.addEventListener('click',e=>{if(e.target===calendarModal)closeCalendar();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeCalendar();});
+setSelectedDate(today);
 
 // ---- Build unit selects (1-9) ----
 const unitEl = document.getElementById('f-unit');
@@ -507,6 +728,69 @@ function updateAmountBox(){
 }
 amountFixed.addEventListener('change', updateAmountBox);
 amountOther.addEventListener('change', updateAmountBox);
+
+// ---- Receipt upload / preview ----
+const receiptBox = document.getElementById('receipt-box');
+const receiptInput = document.getElementById('f-receipt');
+const receiptPreview = document.getElementById('receipt-preview');
+const receiptPreviewImg = document.getElementById('receipt-preview-img');
+const receiptName = document.getElementById('receipt-name');
+const receiptClear = document.getElementById('receipt-clear');
+let receiptData = '';
+
+function updateReceiptVisibility(){
+  const deposit = document.getElementById('type-deposit').checked;
+  receiptBox.classList.toggle('show', deposit);
+  if(!deposit) clearReceipt();
+}
+function clearReceipt(){
+  receiptData='';
+  receiptInput.value='';
+  receiptPreview.classList.remove('show');
+  receiptPreviewImg.removeAttribute('src');
+  receiptName.textContent='رسید انتخاب شد';
+}
+function compressReceipt(file){
+  return new Promise((resolve,reject)=>{
+    if(!file || !file.type.startsWith('image/')) return reject(new Error('نوع فایل نامعتبر است'));
+    if(file.size > 10*1024*1024) return reject(new Error('حجم تصویر بیشتر از ۱۰ مگابایت است'));
+    const reader=new FileReader();
+    reader.onload=e=>{
+      const img=new Image();
+      img.onload=()=>{
+        const max=1400;
+        const scale=Math.min(1,max/Math.max(img.width,img.height));
+        const canvas=document.createElement('canvas');
+        canvas.width=Math.max(1,Math.round(img.width*scale));
+        canvas.height=Math.max(1,Math.round(img.height*scale));
+        const ctx=canvas.getContext('2d');
+        ctx.fillStyle='#fff'; ctx.fillRect(0,0,canvas.width,canvas.height);
+        ctx.drawImage(img,0,0,canvas.width,canvas.height);
+        resolve(canvas.toDataURL('image/jpeg',.76));
+      };
+      img.onerror=()=>reject(new Error('خواندن تصویر ناموفق بود'));
+      img.src=e.target.result;
+    };
+    reader.onerror=()=>reject(new Error('خواندن فایل ناموفق بود'));
+    reader.readAsDataURL(file);
+  });
+}
+receiptInput.addEventListener('change',async e=>{
+  const file=e.target.files[0];
+  if(!file)return;
+  try{
+    receiptData=await compressReceipt(file);
+    receiptPreviewImg.src=receiptData;
+    receiptName.textContent='رسید آماده ثبت است';
+    receiptPreview.classList.add('show');
+  }catch(err){
+    alert(err.message || 'آپلود رسید انجام نشد.');
+    clearReceipt();
+  }
+});
+receiptClear.addEventListener('click',clearReceipt);
+document.getElementById('type-deposit').addEventListener('change',updateReceiptVisibility);
+document.getElementById('type-withdraw').addEventListener('change',updateReceiptVisibility);
 
 // ---- Storage helpers ----
 // All data is saved locally on this device using the browser's localStorage.
@@ -566,6 +850,7 @@ document.getElementById('entry-form').addEventListener('submit', function(e){
     amount,
     type,
     desc,
+    receipt: receiptData || '',
     createdAt: Date.now()
   };
 
@@ -575,6 +860,7 @@ document.getElementById('entry-form').addEventListener('submit', function(e){
 
   customInput.value = '';
   document.getElementById('f-desc').value = '';
+  clearReceipt();
 });
 
 // ---- Delete entry ----
@@ -622,6 +908,7 @@ function render(){
           <span class="entry-date">${dateStr}</span>
         </div>
         ${en.desc ? `<div class="entry-desc">${escapeHtml(en.desc)}</div>` : ''}
+        ${en.receipt ? `<a class="receipt-link" href="${en.receipt}" target="_blank" rel="noopener">🧾 مشاهده رسید پرداخت</a>` : ''}
       </div>
       <div style="display:flex; align-items:center; gap:10px;">
         <div class="entry-amount ${en.type === 'deposit' ? 'deposit' : 'withdraw'}">${formatAmount(en.amount)}</div>
@@ -763,6 +1050,7 @@ document.getElementById('import-file').addEventListener('change', function(e){
 });
 
 updateAmountBox();
+updateReceiptVisibility();
 loadEntries();
 
 // ---- PWA: register service worker so the app works offline once installed ----
