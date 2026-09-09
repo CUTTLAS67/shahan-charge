@@ -6,7 +6,7 @@
 <title>دفتر شارژ ساختمان شاهان</title>
 
 <link rel="manifest" href="manifest.json">
-<meta name="theme-color" content="#1c2b24">
+<meta name="theme-color" content="#0b1b33">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -18,448 +18,110 @@
 <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&display=swap');
   :root{
-    --cover:#1c2b24;
-    --cover-2:#16221c;
-    --paper:#efe9d8;
-    --paper-line:#d9cfb2;
-    --ink:#241f16;
-    --ink-soft:#5b5240;
-    --brass:#a9803f;
-    --brass-deep:#8a6a34;
-    --deposit:#2f6b4f;
-    --withdraw:#a3432d;
+    --navy:#0b1b33;
+    --navy-2:#10294a;
+    --navy-3:#17365f;
+    --gold:#c9a227;
+    --gold-light:#e5c75a;
+    --gold-deep:#9d7810;
+    --paper:#f7f4ec;
+    --paper-2:#fffdf8;
+    --paper-line:#e3d7b6;
+    --ink:#172235;
+    --ink-soft:#647084;
+    --deposit:#2e7d63;
+    --withdraw:#a84b43;
   }
   *{box-sizing:border-box;}
   html,body{margin:0;padding:0;}
   body{
     background:
-      radial-gradient(1200px 600px at 50% -10%, #26382f 0%, var(--cover) 55%, var(--cover-2) 100%);
+      radial-gradient(900px 500px at 50% -8%, rgba(39,76,126,.95) 0%, var(--navy) 55%, #071323 100%);
     min-height:100vh;
-    font-family:'Vazirmatn', sans-serif;
+    font-family:'Vazirmatn', 'IRANYekan', Tahoma, sans-serif;
     color:var(--ink);
-    padding:36px 16px 64px;
+    padding:28px 14px 64px;
   }
+  button,input,select,textarea{font-family:'Vazirmatn','IRANYekan',Tahoma,sans-serif;}
+  .wrap{max-width:680px;margin:0 auto;}
 
-  .wrap{max-width:640px; margin:0 auto;}
-
-  .cover-title{
-    text-align:center;
-    color:#efe9d8;
-    margin-bottom:26px;
-  }
+  .cover-title{text-align:center;color:#fff;margin-bottom:24px;position:relative;}
   .shahan-logo{
-    display:block;
-    width:min(220px,62vw);
-    height:auto;
-    max-height:130px;
-    object-fit:contain;
-    margin:0 auto 14px;
-    filter:drop-shadow(0 8px 18px rgba(0,0,0,.28));
-  }
-  .date-sort-note{
-    margin:0 0 10px;
-    text-align:right;
-    font-size:10px;
-    color:var(--ink-soft);
+    display:block;width:min(210px,58vw);height:auto;max-height:125px;object-fit:contain;
+    margin:0 auto 12px;filter:drop-shadow(0 10px 22px rgba(0,0,0,.45));
   }
   .cover-title .eyebrow{
-    display:block;
-    font-size:13px;
-    color:#b7ad8f;
-    letter-spacing:0.02em;
-    margin-bottom:8px;
+    display:inline-block;font-size:12px;color:var(--gold-light);letter-spacing:.04em;
+    margin-bottom:5px;padding:4px 13px;border:1px solid rgba(229,199,90,.35);
+    border-radius:999px;background:rgba(201,162,39,.08);
   }
-  .cover-title h1{
-    margin:0;
-    font-size:30px;
-    font-weight:800;
-    color:#f4efdf;
-  }
-  .cover-title .sub{
-    margin-top:8px;
-    font-size:14px;
-    color:#9fb0a5;
-  }
+  .cover-title h1{margin:0;font-size:29px;font-weight:900;color:#fff;letter-spacing:-.4px;}
+  .cover-title .sub{margin-top:7px;font-size:13px;color:#b9c5d7;}
 
   .book{
-    background:var(--paper);
-    border-radius:6px;
-    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.06);
-    position:relative;
-    overflow:hidden;
+    background:linear-gradient(145deg,var(--paper-2),var(--paper));border-radius:18px;
+    box-shadow:0 30px 80px -25px rgba(0,0,0,.72),0 0 0 1px rgba(229,199,90,.14);
+    position:relative;overflow:hidden;
   }
-  .book::before{
-    content:"";
-    position:absolute;
-    top:0; right:0; bottom:0;
-    width:14px;
-    background:linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0));
-  }
+  .book::before{content:"";position:absolute;top:0;right:0;bottom:0;width:5px;background:linear-gradient(var(--gold-light),var(--gold-deep));}
+  .book::after{content:"";position:absolute;left:0;top:0;right:0;height:3px;background:linear-gradient(90deg,transparent,var(--gold),transparent);opacity:.9;}
+  .book-inner{padding:30px 27px 25px;}
 
-  .book-inner{ padding:28px 26px 24px; }
+  .section-label{font-size:12px;color:var(--gold-deep);font-weight:800;margin:0 0 12px;padding-bottom:9px;border-bottom:1px solid var(--paper-line);}
+  .field{margin-bottom:19px;}
+  .field label.field-title{display:block;font-size:13px;font-weight:800;color:var(--ink);margin-bottom:8px;}
 
-  .section-label{
-    font-size:12px;
-    color:var(--brass-deep);
-    font-weight:600;
-    margin:0 0 10px;
-    padding-bottom:8px;
-    border-bottom:1px solid var(--paper-line);
+  .date-row{display:flex;gap:8px;}
+  .date-picker-trigger,select,input[type="number"],input[type="text"],textarea{
+    background:#fffdf8;border:1px solid #ded4b9;border-radius:11px;color:var(--ink);outline:none;
+    transition:border-color .2s,box-shadow .2s,transform .15s;
   }
+  .date-picker-trigger{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:12px 13px;font-size:14px;cursor:pointer;text-align:right;}
+  .date-picker-trigger:hover{border-color:var(--gold);box-shadow:0 5px 16px rgba(157,120,16,.10);}
+  .date-picker-icon{font-size:18px;line-height:1;color:var(--gold-deep);}
+  select,input[type="number"],input[type="text"],textarea{width:100%;padding:11px 13px;font-size:14px;}
+  select:focus,input:focus,textarea:focus{border-color:var(--gold);box-shadow:0 0 0 4px rgba(201,162,39,.13);}
+  .date-row select{flex:1;}.unit-select{max-width:180px;}
 
-  .field{ margin-bottom:20px; }
-  .field label.field-title{
-    display:block;
-    font-size:14px;
-    font-weight:600;
-    color:var(--ink);
-    margin-bottom:8px;
-  }
-
-  .date-row{ display:flex; gap:8px; }
-  .date-picker-trigger{
-    width:100%;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    font-family:'Vazirmatn',sans-serif;
-    background:#fbf8ef;
-    border:1px solid var(--paper-line);
-    border-radius:4px;
-    padding:11px 12px;
-    font-size:15px;
-    color:var(--ink);
-    cursor:pointer;
-    text-align:right;
-  }
-  .date-picker-trigger:hover{ border-color:var(--brass); }
-  .date-picker-icon{font-size:18px;line-height:1;}
-  select, input[type="number"], input[type="text"], textarea{
-    font-family:'Vazirmatn', sans-serif;
-    background:#fbf8ef;
-    border:1px solid var(--paper-line);
-    border-radius:4px;
-    padding:10px 12px;
-    font-size:15px;
-    color:var(--ink);
-    width:100%;
-    outline:none;
-  }
-  select:focus, input:focus, textarea:focus{
-    border-color:var(--brass);
-    box-shadow:0 0 0 3px rgba(169,128,63,0.18);
-  }
-  .date-row select{ flex:1; }
-
-  .unit-select{ max-width:180px; }
-
-  /* Persian calendar */
-  .calendar-modal{
-    position:fixed; inset:0; z-index:1000;
-    display:none; align-items:center; justify-content:center;
-    padding:16px; background:rgba(0,0,0,.55);
-    backdrop-filter:blur(3px);
-  }
+  .calendar-modal,.modal-overlay{backdrop-filter:blur(5px);}
+  .calendar-modal{position:fixed;inset:0;z-index:1000;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,12,25,.72);}
   .calendar-modal.show{display:flex;}
-  .calendar{
-    width:min(420px,100%); background:#fbf8ef; color:var(--ink);
-    border:1px solid var(--paper-line); border-radius:10px;
-    box-shadow:0 25px 70px rgba(0,0,0,.35); overflow:hidden;
-  }
-  .calendar-head{
-    background:var(--cover); color:#f4efdf; padding:14px 16px;
-  }
+  .calendar{width:min(420px,100%);background:#fffdf8;color:var(--ink);border:1px solid var(--paper-line);border-radius:16px;box-shadow:0 30px 80px rgba(0,0,0,.5);overflow:hidden;}
+  .calendar-head{background:linear-gradient(135deg,var(--navy-2),var(--navy));color:#fff;padding:15px 16px;}
   .calendar-head-row{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-  .calendar-head-title{font-weight:800;font-size:17px;}
-  .calendar-nav{
-    width:36px;height:36px;border:1px solid rgba(255,255,255,.18);
-    border-radius:6px;background:transparent;color:#f4efdf;font-size:20px;cursor:pointer;
-  }
-  .calendar-nav:hover{background:rgba(255,255,255,.08);}
-  .calendar-weekdays,.calendar-grid{
-    display:grid;grid-template-columns:repeat(7,1fr);gap:4px;padding:10px 12px 0;
-  }
-  .calendar-weekdays div{text-align:center;font-size:11px;color:var(--ink-soft);font-weight:700;padding:4px 0;}
-  .calendar-grid{padding-top:4px;padding-bottom:12px;}
-  .calendar-day{
-    aspect-ratio:1;border:1px solid transparent;background:transparent;border-radius:6px;
-    font-family:'Vazirmatn',sans-serif;font-size:13px;cursor:pointer;color:var(--ink);
-  }
-  .calendar-day:hover{background:#f4e9d2;border-color:var(--brass);}
-  .calendar-day.selected{background:var(--brass-deep);color:#fff;border-color:var(--brass-deep);font-weight:800;}
-  .calendar-day.today{box-shadow:inset 0 0 0 1px var(--brass);font-weight:800;}
-  .calendar-day.empty{cursor:default;}
-  .calendar-footer{
-    border-top:1px solid var(--paper-line);padding:10px 12px;
-    display:flex;gap:8px;
-  }
-  .calendar-footer button{
-    flex:1;padding:9px;border-radius:6px;font-family:'Vazirmatn',sans-serif;
-    cursor:pointer;border:1px solid var(--paper-line);background:transparent;color:var(--ink-soft);
-  }
-  .calendar-footer .today-btn{border-color:var(--brass);color:var(--brass-deep);font-weight:700;}
-  .receipt-box{display:none;margin-top:10px;}
-  .receipt-box.show{display:block;}
-  .receipt-input{
-    width:100%;padding:10px;border:1px dashed var(--paper-line);border-radius:6px;
-    background:#fbf8ef;font-family:'Vazirmatn',sans-serif;font-size:13px;cursor:pointer;
-  }
-  .receipt-preview{display:none;margin-top:9px;align-items:center;gap:10px;}
-  .receipt-preview.show{display:flex;}
-  .receipt-preview img{width:72px;height:72px;object-fit:cover;border-radius:6px;border:1px solid var(--paper-line);}
-  .receipt-preview-text{font-size:12px;color:var(--ink-soft);line-height:1.8;}
-  .receipt-clear{border:0;background:transparent;color:var(--withdraw);font-family:'Vazirmatn';cursor:pointer;font-size:12px;}
-  .receipt-link{
-    display:inline-flex;align-items:center;gap:4px;margin-top:5px;
-    font-size:11px;color:var(--brass-deep);text-decoration:none;font-weight:700;
-  }
+  .calendar-head-title{font-weight:900;font-size:17px;}.calendar-nav{width:38px;height:38px;border:1px solid rgba(229,199,90,.35);border-radius:10px;background:rgba(201,162,39,.08);color:var(--gold-light);font-size:20px;cursor:pointer;}
+  .calendar-nav:hover{background:rgba(201,162,39,.18);}
+  .calendar-weekdays,.calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:5px;padding:11px 13px 0;}
+  .calendar-weekdays div{text-align:center;font-size:11px;color:var(--ink-soft);font-weight:800;padding:4px 0;}.calendar-grid{padding-top:4px;padding-bottom:13px;}
+  .calendar-day{aspect-ratio:1;border:1px solid transparent;background:transparent;border-radius:10px;font-size:13px;cursor:pointer;color:var(--ink);transition:.15s;}
+  .calendar-day:hover{background:#f5edd5;border-color:var(--gold);transform:translateY(-1px);}.calendar-day.selected{background:linear-gradient(135deg,var(--gold),var(--gold-deep));color:#fff;border-color:var(--gold-deep);font-weight:900;box-shadow:0 5px 12px rgba(157,120,16,.25);}.calendar-day.today{box-shadow:inset 0 0 0 1.5px var(--gold);font-weight:900;}.calendar-day.empty{cursor:default;}
+  .calendar-footer{border-top:1px solid var(--paper-line);padding:10px 12px;display:flex;gap:8px;}.calendar-footer button{flex:1;padding:9px;border-radius:9px;cursor:pointer;border:1px solid var(--paper-line);background:#fff;color:var(--ink-soft);}.calendar-footer .today-btn{border-color:var(--gold);color:var(--gold-deep);font-weight:800;}
 
-  .choice-row{
-    display:flex;
-    gap:10px;
-    flex-wrap:wrap;
-  }
-  .choice{
-    flex:1;
-    min-width:130px;
-    position:relative;
-  }
-  .choice input{ position:absolute; opacity:0; }
-  .choice label{
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:6px;
-    text-align:center;
-    padding:11px 10px;
-    border:1px solid var(--paper-line);
-    border-radius:4px;
-    background:#fbf8ef;
-    font-size:14px;
-    font-weight:600;
-    cursor:pointer;
-    color:var(--ink-soft);
-    transition:border-color .15s, color .15s, background .15s;
-  }
-  .choice input:checked + label{
-    border-color:var(--brass);
-    background:#f4e9d2;
-    color:var(--brass-deep);
-  }
-  .choice.type-deposit input:checked + label{
-    border-color:var(--deposit);
-    background:#e4efe8;
-    color:var(--deposit);
-  }
-  .choice.type-withdraw input:checked + label{
-    border-color:var(--withdraw);
-    background:#f3e5e0;
-    color:var(--withdraw);
-  }
+  .receipt-box{display:none;margin-top:10px;}.receipt-box.show{display:block;}.receipt-input{width:100%;padding:11px;border:1px dashed #cdbd91;border-radius:10px;background:#fffdf8;font-size:12px;cursor:pointer;}.receipt-preview{display:none;margin-top:9px;align-items:center;gap:10px;}.receipt-preview.show{display:flex;}.receipt-preview img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--paper-line);}.receipt-preview-text{font-size:11px;color:var(--ink-soft);line-height:1.8;}.receipt-clear{border:0;background:transparent;color:var(--withdraw);cursor:pointer;font-size:11px;}.receipt-link{display:inline-flex;align-items:center;gap:4px;margin-top:5px;font-size:11px;color:var(--gold-deep);text-decoration:none;font-weight:800;}
 
-  .custom-amount{
-    margin-top:10px;
-    display:none;
-  }
-  .custom-amount.show{ display:block; }
-  .amount-suffix{
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .amount-suffix span{ font-size:13px; color:var(--ink-soft); white-space:nowrap; }
+  .choice-row{display:flex;gap:10px;flex-wrap:wrap;}.choice{flex:1;min-width:130px;position:relative;}.choice input{position:absolute;opacity:0;}.choice label{display:flex;align-items:center;justify-content:center;gap:6px;text-align:center;padding:12px 10px;border:1px solid #ded4b9;border-radius:11px;background:#fffdf8;font-size:13px;font-weight:800;cursor:pointer;color:var(--ink-soft);transition:.2s;}.choice label:hover{border-color:var(--gold);transform:translateY(-1px);}.choice input:checked+label{border-color:var(--gold);background:linear-gradient(180deg,#fff9e8,#f7edd0);color:var(--gold-deep);box-shadow:0 6px 14px rgba(157,120,16,.10);}.choice.type-deposit input:checked+label{border-color:var(--deposit);background:#eaf5ef;color:var(--deposit);}.choice.type-withdraw input:checked+label{border-color:var(--withdraw);background:#f9ecea;color:var(--withdraw);}
+  .custom-amount{margin-top:10px;display:none;}.custom-amount.show{display:block;}.amount-suffix{display:flex;align-items:center;gap:8px;}.amount-suffix span{font-size:12px;color:var(--ink-soft);white-space:nowrap;}
+  textarea{resize:vertical;min-height:78px;}
 
-  textarea{ resize:vertical; min-height:70px; }
+  .submit-btn,.backup-btn,.modal-close,.calendar-footer button{position:relative;overflow:hidden;}
+  .submit-btn{width:100%;padding:14px;border:0;border-radius:12px;background:linear-gradient(135deg,var(--gold-light),var(--gold),var(--gold-deep));color:#101a2a;font-size:14px;font-weight:900;cursor:pointer;box-shadow:0 10px 22px rgba(157,120,16,.22);transition:.2s;}
+  .submit-btn:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(157,120,16,.30);}.submit-btn:active{transform:translateY(0) scale(.99);}
+  .divider{height:1px;background:linear-gradient(90deg,transparent,var(--paper-line),transparent);margin:8px 0 22px;}
 
-  .submit-btn{
-    width:100%;
-    padding:13px;
-    border:none;
-    border-radius:4px;
-    background:var(--brass-deep);
-    color:#f8f3e4;
-    font-family:'Vazirmatn', sans-serif;
-    font-size:15px;
-    font-weight:700;
-    cursor:pointer;
-    transition:background .15s, transform .05s;
-  }
-  .submit-btn:hover{ background:#77592b; }
-  .submit-btn:active{ transform:scale(0.99); }
-
-  .divider{
-    height:1px;
-    background:repeating-linear-gradient(90deg, var(--paper-line) 0 6px, transparent 6px 12px);
-    margin:6px 0 22px;
-  }
-
-  .totals{
-    display:grid;
-    grid-template-columns:repeat(3, 1fr);
-    gap:10px;
-    margin-bottom:20px;
-  }
-  .total-card{
-    background:#fbf8ef;
-    border:1px solid var(--paper-line);
-    border-radius:4px;
-    padding:12px 10px;
-    text-align:center;
-  }
-  .total-card .t-label{ font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
-  .total-card .t-value{ font-size:16px; font-weight:800; direction:ltr; }
-  .total-card.deposit .t-value{ color:var(--deposit); }
-  .total-card.withdraw .t-value{ color:var(--withdraw); }
-  .total-card.balance .t-value{ color:var(--brass-deep); }
-
-  .filter-row{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
-    margin-bottom:12px;
-  }
-  .filter-row select{ max-width:170px; }
-
-  .entries{ display:flex; flex-direction:column; gap:8px; }
-  .entry{
-    background:#fbf8ef;
-    border:1px solid var(--paper-line);
-    border-radius:4px;
-    padding:12px 14px;
-    display:flex;
-    align-items:flex-start;
-    justify-content:space-between;
-    gap:10px;
-  }
-  .entry-main{ flex:1; min-width:0; }
-  .entry-top{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:4px;
-  }
-  .entry-type{
-    font-size:11px;
-    font-weight:700;
-    padding:2px 8px;
-    border-radius:3px;
-  }
-  .entry-type.deposit{ background:#e4efe8; color:var(--deposit); }
-  .entry-type.withdraw{ background:#f3e5e0; color:var(--withdraw); }
-  .entry-unit{ font-size:13px; font-weight:600; color:var(--ink); }
-  .entry-date{ font-size:12px; color:var(--ink-soft); }
-  .entry-desc{ font-size:13px; color:var(--ink-soft); margin-top:3px; }
-  .entry-amount{
-    font-size:15px;
-    font-weight:800;
-    white-space:nowrap;
-    direction:ltr;
-  }
-  .entry-amount.deposit{ color:var(--deposit); }
-  .entry-amount.withdraw{ color:var(--withdraw); }
-  .entry-del{
-    border:none;
-    background:none;
-    color:#b98a7a;
-    font-size:13px;
-    cursor:pointer;
-    padding:4px;
-    flex-shrink:0;
-  }
-  .entry-del:hover{ color:var(--withdraw); }
-
-  .empty{
-    text-align:center;
-    padding:24px 10px;
-    color:var(--ink-soft);
-    font-size:14px;
-  }
-
-  .backup-row{
-    display:flex;
-    gap:10px;
-    margin:16px 0 18px;
-  }
-  .backup-btn{
-    flex:1;
-    text-align:center;
-    padding:9px 10px;
-    border:1px dashed var(--paper-line);
-    border-radius:4px;
-    background:transparent;
-    color:var(--ink-soft);
-    font-family:'Vazirmatn', sans-serif;
-    font-size:12px;
-    font-weight:600;
-    cursor:pointer;
-  }
-  .backup-btn:hover{
-    border-color:var(--brass);
-    color:var(--brass-deep);
-  }
-
-  .device-note{
-    text-align:center;
-    font-size:11px;
-    color:var(--ink-soft);
-    margin-top:14px;
-    line-height:1.7;
-  }
-
-  .dashboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 18px;}
-  .dash-card{background:#fbf8ef;border:1px solid var(--paper-line);border-radius:6px;padding:12px;}
-  .dash-card .dash-title{font-size:11px;color:var(--ink-soft);margin-bottom:5px}
-  .dash-card .dash-value{font-size:17px;font-weight:800}
-  .dash-card .dash-value.negative{color:var(--withdraw)}
-  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
-  .search-wrap{position:relative;}
-  .search-wrap input{padding-right:38px;}
-  .search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--ink-soft);pointer-events:none}
-  .entry-actions{display:flex;align-items:center;gap:4px;flex-shrink:0}
-  .entry-action{border:1px solid transparent;background:transparent;color:var(--ink-soft);font-family:'Vazirmatn',sans-serif;font-size:11px;cursor:pointer;padding:5px 7px;border-radius:4px}
-  .entry-action:hover{border-color:var(--paper-line);background:#f4e9d2;color:var(--brass-deep)}
-  .entry-action.danger:hover{color:var(--withdraw);}
-  .entry-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}
-  .entry-receipt{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--brass-deep);font-weight:700;cursor:pointer;background:none;border:0;font-family:'Vazirmatn',sans-serif;padding:0}
-  .report-box{border:1px solid var(--paper-line);border-radius:6px;background:#fbf8ef;padding:12px;margin:12px 0 18px;}
-  .report-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
-  .report-head strong{font-size:13px}
-  .report-table{width:100%;border-collapse:collapse;font-size:11px}
-  .report-table th,.report-table td{padding:7px 5px;border-bottom:1px solid var(--paper-line);text-align:center}
-  .report-table th{color:var(--ink-soft);font-weight:700}
-  .report-table tr:last-child td{border-bottom:0}
-  .edit-badge{font-size:10px;background:#ece3cc;color:var(--brass-deep);padding:2px 6px;border-radius:3px}
-  .modal-overlay{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.62);backdrop-filter:blur(3px)}
-  .modal-overlay.show{display:flex}
-  .receipt-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#fbf8ef;border-radius:10px;padding:12px;box-shadow:0 25px 70px rgba(0,0,0,.4)}
-  .receipt-modal img{display:block;width:100%;max-height:72vh;object-fit:contain;border-radius:6px;background:#eee}
-  .modal-close{width:100%;margin-top:10px;padding:9px;border:1px solid var(--paper-line);background:transparent;border-radius:6px;font-family:'Vazirmatn';cursor:pointer}
-  .edit-mode{display:none;background:#f4e9d2;border:1px solid var(--brass);border-radius:5px;padding:8px 10px;margin-bottom:12px;font-size:12px;color:var(--brass-deep);align-items:center;justify-content:space-between;gap:8px}
-  .edit-mode.show{display:flex}
-  .edit-cancel{border:0;background:transparent;color:var(--withdraw);font-family:'Vazirmatn';cursor:pointer;font-size:11px}
-
-  .cloud-bar{display:flex;align-items:center;justify-content:space-between;gap:10px;background:#e8efe9;border:1px solid #c7d7cc;border-radius:7px;padding:9px 11px;margin-bottom:16px;font-size:11px;color:#365344;}
-  .cloud-bar strong{font-size:12px;}
-  #cloud-status{color:#6a776f;margin-right:4px;}
-  .cloud-actions{display:flex;gap:6px;}
-  .cloud-btn{border:1px solid #b8c9bd;background:#fbf8ef;color:#365344;border-radius:5px;padding:6px 9px;font-family:'Vazirmatn';font-size:11px;cursor:pointer;}
-  .cloud-btn:hover{border-color:var(--brass);}
-  .auth-modal{position:fixed;inset:0;z-index:1200;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.58);backdrop-filter:blur(3px)}
-  .auth-modal.show{display:flex}
-  .auth-card{width:min(390px,100%);background:#fbf8ef;border:1px solid var(--paper-line);border-radius:10px;padding:18px;box-shadow:0 25px 70px rgba(0,0,0,.4)}
-  .auth-title{font-size:18px;font-weight:800;margin-bottom:6px;color:var(--ink)}
-  .auth-note{font-size:12px;line-height:1.8;color:var(--ink-soft);margin-bottom:12px}
-  .auth-card input{margin-bottom:9px}
-  .auth-actions{display:flex;gap:8px;margin-top:4px}
-  .auth-actions>*{flex:1}
-  .auth-error{font-size:11px;color:var(--withdraw);margin-top:8px;min-height:16px;line-height:1.7}
-  .sync-badge{font-size:10px;padding:2px 6px;border-radius:10px;background:#e4efe8;color:var(--deposit);}
-  @media(max-width:520px){.cloud-bar{align-items:flex-start;flex-direction:column}.cloud-actions{width:100%}.cloud-btn{flex:1}}
-  @media(max-width:520px){.dashboard{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.entry{padding:10px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 6px}}
+  .totals{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}.total-card,.dash-card,.report-box{background:rgba(255,253,248,.92);border:1px solid #e1d6b9;box-shadow:0 6px 18px rgba(19,34,56,.05);}.total-card{border-radius:13px;padding:13px 10px;text-align:center;}.total-card .t-label{font-size:11px;color:var(--ink-soft);margin-bottom:6px;font-weight:700;}.total-card .t-value{font-size:15px;font-weight:900;direction:ltr;}.total-card.deposit .t-value{color:var(--deposit);}.total-card.withdraw .t-value{color:var(--withdraw);}.total-card.balance .t-value{color:var(--gold-deep);}
+  .filter-row{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:12px;}.filter-row select{max-width:170px;}
+  .entries{display:flex;flex-direction:column;gap:10px;}.entry{background:rgba(255,253,248,.96);border:1px solid #e0d5b9;border-radius:14px;padding:13px 14px;display:flex;align-items:flex-start;justify-content:space-between;gap:10px;box-shadow:0 5px 16px rgba(19,34,56,.05);transition:.18s;}.entry:hover{transform:translateY(-1px);border-color:#d2bb75;box-shadow:0 9px 22px rgba(19,34,56,.08);}.entry-main{flex:1;min-width:0;}.entry-top{display:flex;align-items:center;gap:7px;flex-wrap:wrap;margin-bottom:4px;}.entry-type{font-size:10px;font-weight:800;padding:3px 8px;border-radius:999px;}.entry-type.deposit{background:#e6f3ec;color:var(--deposit);}.entry-type.withdraw{background:#f8e8e5;color:var(--withdraw);}.entry-unit{font-size:12px;font-weight:800;color:var(--ink);}.entry-date{font-size:11px;color:var(--ink-soft);}.entry-desc{font-size:12px;color:var(--ink-soft);margin-top:3px;}.entry-amount{font-size:14px;font-weight:900;white-space:nowrap;direction:ltr;}.entry-amount.deposit{color:var(--deposit);}.entry-amount.withdraw{color:var(--withdraw);}
+  .entry-actions{display:flex;align-items:center;gap:5px;flex-shrink:0;}.entry-action{border:1px solid #e1d6b9;background:#fffdf8;color:var(--ink-soft);font-size:10px;cursor:pointer;padding:6px 9px;border-radius:9px;transition:.18s;}.entry-action:hover{border-color:var(--gold);background:#fff8e6;color:var(--gold-deep);transform:translateY(-1px);}.entry-action.danger:hover{border-color:#d6aaa3;color:var(--withdraw);}.entry-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px;}.entry-receipt{display:inline-flex;align-items:center;gap:4px;font-size:10px;color:var(--gold-deep);font-weight:800;cursor:pointer;background:none;border:0;padding:0;}
+  .empty{text-align:center;padding:28px 10px;color:var(--ink-soft);font-size:13px;}
+  .backup-row{display:flex;gap:9px;margin:16px 0 18px;}.backup-btn{flex:1;text-align:center;padding:10px;border:1px solid #d8cba7;border-radius:10px;background:#fffdf8;color:var(--navy-2);font-size:11px;font-weight:800;cursor:pointer;transition:.18s;}.backup-btn:hover{border-color:var(--gold);color:var(--gold-deep);background:#fff9ea;transform:translateY(-1px);}
+  .device-note{text-align:center;font-size:10px;color:var(--ink-soft);margin-top:14px;line-height:1.8;}
+  .dashboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 18px;}.dash-card{border-radius:13px;padding:13px;}.dash-card .dash-title{font-size:10px;color:var(--ink-soft);margin-bottom:5px;font-weight:700}.dash-card .dash-value{font-size:16px;font-weight:900;color:var(--navy-2)}.dash-card .dash-value.negative{color:var(--withdraw)}
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.search-wrap{position:relative;}.search-wrap input{padding-right:38px;}.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--gold-deep);pointer-events:none;}.report-box{border-radius:13px;padding:13px;margin:12px 0 18px;}.report-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.report-head strong{font-size:12px;color:var(--navy-2)}.report-table{width:100%;border-collapse:collapse;font-size:10px}.report-table th,.report-table td{padding:7px 5px;border-bottom:1px solid var(--paper-line);text-align:center}.report-table th{color:var(--ink-soft);font-weight:800}.report-table tr:last-child td{border-bottom:0}.edit-badge{font-size:9px;background:#f4ead0;color:var(--gold-deep);padding:3px 7px;border-radius:999px;font-weight:700;}
+  .modal-overlay{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,12,25,.74);}.modal-overlay.show{display:flex}.receipt-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#fffdf8;border-radius:16px;padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.receipt-modal img{display:block;width:100%;max-height:72vh;object-fit:contain;border-radius:10px;background:#eee}.modal-close{width:100%;margin-top:10px;padding:10px;border:1px solid #d8cba7;background:#fffdf8;color:var(--navy-2);border-radius:10px;cursor:pointer;font-weight:800}.modal-close:hover{border-color:var(--gold);background:#fff8e8;}
+  .edit-mode{display:none;background:#fff7df;border:1px solid var(--gold);border-radius:10px;padding:9px 11px;margin-bottom:12px;font-size:11px;color:var(--gold-deep);align-items:center;justify-content:space-between;gap:8px}.edit-mode.show{display:flex}.edit-cancel{border:0;background:transparent;color:var(--withdraw);cursor:pointer;font-size:10px;font-weight:700}
+  @media(max-width:520px){body{padding:20px 10px 45px}.book-inner{padding:24px 17px 20px}.cover-title h1{font-size:25px}.shahan-logo{width:min(185px,58vw)}dashboard{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.entry{padding:11px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 5px}.total-card .t-value{font-size:13px}}
 </style>
 </head>
 <body>
@@ -474,14 +136,6 @@
 
   <div class="book">
     <div class="book-inner">
-
-      <div class="cloud-bar" id="cloud-bar">
-        <div>☁️ <strong>حساب آنلاین شاهان</strong><span id="cloud-status"> در حال بررسی...</span></div>
-        <div class="cloud-actions">
-          <button type="button" id="login-btn" class="cloud-btn">ورود مدیر</button>
-          <button type="button" id="logout-btn" class="cloud-btn" style="display:none">خروج</button>
-        </div>
-      </div>
 
       <p class="section-label">ثبت تراکنش جدید</p>
 
@@ -607,22 +261,11 @@
         <div class="empty">در حال بارگذاری...</div>
       </div>
 
-      <div class="device-note" id="device-note">در حالت آنلاین، اطلاعات و رسیدها روی پایگاه داده امن ذخیره می‌شوند و از هر دستگاه قابل دسترسی‌اند. در حالت آفلاین، اطلاعات روی همین مرورگر نگهداری می‌شود.</div>
+      <div class="device-note" id="device-note">🔒 حالت آفلاین فعال است؛ اطلاعات و رسیدها فقط روی همین گوشی/مرورگر ذخیره می‌شوند. برای جلوگیری از از دست رفتن اطلاعات، مرتب از بخش پشتیبان‌گیری فایل JSON تهیه کنید.</div>
 
     </div>
   </div>
 
-</div>
-
-<div class="auth-modal" id="auth-modal" aria-hidden="true">
-  <div class="auth-card" role="dialog" aria-modal="true" aria-label="ورود مدیر">
-    <div class="auth-title">ورود مدیر</div>
-    <div class="auth-note">برای همگام‌سازی آنلاین، ایمیل و رمز مدیر را وارد کنید.</div>
-    <input type="email" id="auth-email" placeholder="ایمیل مدیر" autocomplete="username">
-    <input type="password" id="auth-password" placeholder="رمز عبور" autocomplete="current-password">
-    <div class="auth-actions"><button type="button" class="submit-btn" id="auth-submit">ورود</button><button type="button" class="modal-close" id="auth-close">بستن</button></div>
-    <div class="auth-error" id="auth-error"></div>
-  </div>
 </div>
 
 <div class="calendar-modal" id="calendar-modal" aria-hidden="true">
@@ -652,8 +295,6 @@
   </div>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="supabase-config.js"></script>
 <script>
 const PERSIAN_MONTHS = ["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
 const PERSIAN_DIGITS = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
@@ -904,170 +545,68 @@ receiptClear.addEventListener('click',clearReceipt);
 document.getElementById('type-deposit').addEventListener('change',updateReceiptVisibility);
 document.getElementById('type-withdraw').addEventListener('change',updateReceiptVisibility);
 
-// ---- Storage: Supabase online + local fallback ----
+// ---- Offline storage (localStorage) ----
 let entries = [];
 let editingId = null;
 let searchTerm = "";
 let receiptModal = document.getElementById('receipt-modal');
 let receiptModalImg = document.getElementById('receipt-modal-img');
-let remoteEnabled = !!(window.SHAHAN_SUPABASE && window.SHAHAN_SUPABASE.url && window.SHAHAN_SUPABASE.anonKey);
-let sb = null;
-let currentUser = null;
 const LOCAL_KEY = STORAGE_KEY;
 
-if(remoteEnabled && window.supabase){
-  sb = window.supabase.createClient(window.SHAHAN_SUPABASE.url, window.SHAHAN_SUPABASE.anonKey);
-}
-
-const cloudStatus = document.getElementById('cloud-status');
-const loginBtn = document.getElementById('login-btn');
-const logoutBtn = document.getElementById('logout-btn');
-const authModal = document.getElementById('auth-modal');
-const authEmail = document.getElementById('auth-email');
-const authPassword = document.getElementById('auth-password');
-const authSubmit = document.getElementById('auth-submit');
-const authClose = document.getElementById('auth-close');
-const authError = document.getElementById('auth-error');
-
-function setCloudStatus(text, ok=false){
-  cloudStatus.textContent = ' ' + text;
-  cloudStatus.style.color = ok ? 'var(--deposit)' : 'var(--ink-soft)';
-}
-function openAuth(){authError.textContent='';authModal.classList.add('show');authModal.setAttribute('aria-hidden','false');authEmail.focus();}
-function closeAuth(){authModal.classList.remove('show');authModal.setAttribute('aria-hidden','true');}
-loginBtn.addEventListener('click',openAuth); authClose.addEventListener('click',closeAuth);
-authModal.addEventListener('click',e=>{if(e.target===authModal)closeAuth();});
-
 function localSave(){
-  try{localStorage.setItem(LOCAL_KEY,JSON.stringify(entries));return true;}
-  catch(e){alert('حافظه مرورگر پر شده است. لطفاً نسخه JSON پشتیبان بگیرید.');return false;}
+  try{
+    localStorage.setItem(LOCAL_KEY,JSON.stringify(entries));
+    return true;
+  }catch(e){
+    alert('حافظه گوشی/مرورگر پر شده است. لطفاً ابتدا از اطلاعات پشتیبان JSON بگیرید.');
+    return false;
+  }
 }
 function localLoad(){
-  try{const raw=localStorage.getItem(LOCAL_KEY);entries=raw?JSON.parse(raw):[];if(!Array.isArray(entries))entries=[];}
-  catch(e){entries=[];}
+  try{
+    const raw=localStorage.getItem(LOCAL_KEY);
+    entries=raw?JSON.parse(raw):[];
+    if(!Array.isArray(entries)) entries=[];
+  }catch(e){ entries=[]; }
 }
 function saveEntries(){ return localSave(); }
 function loadEntries(){ localLoad(); render(); }
-
-function normalizeRow(r){
-  return {id:r.id,day:r.day,month:r.month,year:r.year,unit:r.unit,amount:Number(r.amount),type:r.type,desc:r.desc||'',receipt:r.receipt_path||'',createdAt:r.created_at?new Date(r.created_at).getTime():Date.now(),updatedAt:r.updated_at?new Date(r.updated_at).getTime():Date.now()};
-}
-async function loadRemote(){
-  if(!sb || !currentUser){localLoad();render();return;}
-  const localSnapshot = (()=>{try{const raw=localStorage.getItem(LOCAL_KEY);const x=raw?JSON.parse(raw):[];return Array.isArray(x)?x:[];}catch(e){return [];}})();
-  const {data,error}=await sb.from('transactions').select('*').order('created_at',{ascending:false});
-  if(error){console.error(error);alert('دریافت اطلاعات آنلاین ناموفق بود: '+error.message);localLoad();render();return;}
-  const remoteRows=(data||[]).map(normalizeRow);
-  if(remoteRows.length===0 && localSnapshot.length>0){
-    const migrate=confirm(`در این مرورگر ${toPersianDigits(localSnapshot.length)} تراکنش قبلی پیدا شد. آنها را به حساب آنلاین منتقل کنم؟`);
-    if(migrate){
-      let ok=0;
-      for(const item of localSnapshot){
-        try{
-          const copy={...item,id:(crypto.randomUUID?crypto.randomUUID():Date.now().toString(36)+Math.random().toString(36).slice(2,8)),receipt:''};
-          if(item.receipt && String(item.receipt).startsWith('data:')) copy.receipt=await uploadReceiptRemote(item.receipt,copy.id);
-          const saved=await saveEntryRemote(copy); remoteRows.push(saved); ok++;
-        }catch(err){console.warn('migration',err);}
-      }
-      if(ok) localStorage.removeItem(LOCAL_KEY);
-      alert(`${toPersianDigits(ok)} تراکنش به حساب آنلاین منتقل شد.`);
-    }
-  }
-  entries=remoteRows;
-  render();
-}
-async function uploadReceiptRemote(dataUrl, entryId){
-  if(!sb || !currentUser || !dataUrl) return '';
-  const blob=await (await fetch(dataUrl)).blob();
-  const path=currentUser.id+'/'+entryId+'-'+Date.now()+'.jpg';
-  const {error}=await sb.storage.from('receipts').upload(path,blob,{contentType:'image/jpeg',upsert:true});
-  if(error) throw error;
-  return path;
-}
-async function removeReceiptRemote(path){
-  if(!sb || !currentUser || !path) return;
-  const {error}=await sb.storage.from('receipts').remove([path]);
-  if(error) console.warn('receipt remove',error);
-}
-async function getReceiptUrl(path){
-  if(!path) return '';
-  if(!sb || !currentUser || path.startsWith('data:')) return path;
-  const {data,error}=await sb.storage.from('receipts').createSignedUrl(path,3600);
-  return error ? '' : (data?.signedUrl||'');
-}
-
-async function saveEntryRemote(entry){
-  const payload={id:entry.id,day:entry.day,month:entry.month,year:entry.year,unit:entry.unit,amount:entry.amount,type:entry.type,desc:entry.desc||'',receipt_path:entry.receipt||null,updated_at:new Date().toISOString(),created_at:new Date(entry.createdAt||Date.now()).toISOString()};
-  const {data,error}=await sb.from('transactions').upsert(payload).select().single();
-  if(error) throw error;
-  return normalizeRow(data);
-}
-async function deleteEntryRemote(entry){
-  if(entry.receipt) await removeReceiptRemote(entry.receipt);
-  const {error}=await sb.from('transactions').delete().eq('id',entry.id);
-  if(error) throw error;
-}
-
-async function initCloud(){
-  if(!remoteEnabled || !sb){setCloudStatus('حالت محلی');document.getElementById('device-note').textContent='حالت آنلاین هنوز تنظیم نشده است؛ اطلاعات فعلاً فقط روی همین مرورگر ذخیره می‌شود.';loadLocalAndRender();return;}
-  setCloudStatus('اتصال آنلاین فعال');
-  const {data:{session}}=await sb.auth.getSession();
-  await applySession(session);
-  sb.auth.onAuthStateChange((_event,session)=>{setTimeout(()=>applySession(session),0);});
-}
-async function applySession(session){
-  currentUser=session?.user||null;
-  if(currentUser){
-    loginBtn.style.display='none';logoutBtn.style.display='inline-block';setCloudStatus('آنلاین · '+(currentUser.email||'مدیر'),true);document.getElementById('device-note').textContent='اطلاعات و رسیدها روی پایگاه داده آنلاین ذخیره می‌شوند و از هر دستگاه با ورود مدیر قابل دسترسی‌اند.';closeAuth();await loadRemote();
-  }else{
-    loginBtn.style.display='inline-block';logoutBtn.style.display='none';setCloudStatus('برای همگام‌سازی وارد شوید');entries=[];localLoad();render();
-  }
-}
-async function loadLocalAndRender(){localLoad();render();}
-
-logoutBtn.addEventListener('click',async()=>{if(sb)await sb.auth.signOut();});
-authSubmit.addEventListener('click',async()=>{
-  if(!sb)return;
-  authError.textContent='';
-  const email=authEmail.value.trim(), password=authPassword.value;
-  if(!email||!password){authError.textContent='ایمیل و رمز عبور را وارد کنید.';return;}
-  authSubmit.disabled=true;authSubmit.textContent='در حال ورود...';
-  const {error}=await sb.auth.signInWithPassword({email,password});
-  authSubmit.disabled=false;authSubmit.textContent='ورود';
-  if(error)authError.textContent='ورود ناموفق بود: '+error.message;
-});
-authPassword.addEventListener('keydown',e=>{if(e.key==='Enter')authSubmit.click();});
+function getReceiptUrl(path){ return path || ''; }
 
 // ---- Form submit / edit ----
-document.getElementById('entry-form').addEventListener('submit', async function(e){
+document.getElementById('entry-form').addEventListener('submit', function(e){
   e.preventDefault();
   let amount;
-  if(amountOther.checked){amount=parseInt(customInput.value,10);if(!amount||amount<=0){customInput.focus();return;}}
-  else amount=400000;
+  if(amountOther.checked){
+    amount=parseInt(customInput.value,10);
+    if(!amount||amount<=0){customInput.focus();return;}
+  }else amount=400000;
   const type=document.querySelector('input[name="f-type"]:checked').value;
   const unit=unitEl.value;
   const day=dayEl.value, month=monthEl.value, year=yearEl.value;
   const desc=document.getElementById('f-desc').value.trim();
   const old=editingId?entries.find(en=>en.id===editingId):null;
   const id=editingId || (crypto.randomUUID ? crypto.randomUUID() : Date.now().toString(36)+Math.random().toString(36).slice(2,8));
-  const entry={id,day:parseInt(day,10),month:parseInt(month,10),year:parseInt(year,10),unit:parseInt(unit,10),amount,type,desc,receipt:old?old.receipt||'':'',createdAt:old?old.createdAt:Date.now(),updatedAt:Date.now()};
-  const submit=document.getElementById('submit-btn'); submit.disabled=true; const oldText=submit.textContent; submit.textContent=currentUser?'در حال ذخیره...':'در حال ثبت...';
+  const entry={
+    id,day:parseInt(day,10),month:parseInt(month,10),year:parseInt(year,10),
+    unit:parseInt(unit,10),amount,type,desc,
+    receipt:receiptData || (old?old.receipt||'':''),
+    createdAt:old?old.createdAt:Date.now(),updatedAt:Date.now()
+  };
+  const submit=document.getElementById('submit-btn');
+  submit.disabled=true;
+  const wasEditing=!!editingId;
+  submit.textContent=wasEditing?'در حال ذخیره...':'در حال ثبت...';
   try{
-    if(currentUser){
-      if(receiptData && receiptData.startsWith('data:')){
-        entry.receipt=await uploadReceiptRemote(receiptData,id);
-        if(old?.receipt && old.receipt !== entry.receipt) await removeReceiptRemote(old.receipt);
-      } else if(!receiptData && old?.receipt){entry.receipt=old.receipt;}
-      const saved=await saveEntryRemote(entry);
-      entries=editingId?entries.map(en=>en.id===editingId?saved:en):[saved,...entries];
-    }else{
-      entry.receipt=receiptData || (old?old.receipt||'':'');
-      if(editingId)entries=entries.map(en=>en.id===editingId?entry:en);else entries.push(entry);
-      if(!localSave())return;
-    }
-    resetForm();render();
-  }catch(err){console.error(err);alert('ذخیره تراکنش ناموفق بود: '+(err.message||err));}
-  finally{submit.disabled=false;submit.textContent=editingId?oldText:'ثبت تراکنش';}
+    if(wasEditing) entries=entries.map(en=>en.id===editingId?entry:en);
+    else entries.push(entry);
+    if(!localSave()) return;
+    resetForm();
+    render();
+  }finally{
+    submit.disabled=false;
+    submit.textContent='ثبت تراکنش';
+  }
 });
 
 function resetForm(){
@@ -1083,7 +622,7 @@ function resetForm(){
   document.getElementById('submit-btn').textContent='ثبت تراکنش';
 }
 
-async function startEdit(id){
+function startEdit(id){
   const en=entries.find(x=>x.id===id); if(!en)return;
   editingId=id; dayEl.value=en.day;monthEl.value=en.month;yearEl.value=en.year;selectedDateLabel.textContent=`${toPersianDigits(en.day)} ${PERSIAN_MONTHS[en.month-1]} ${toPersianDigits(en.year)}`;
   unitEl.value=en.unit;
@@ -1092,18 +631,19 @@ async function startEdit(id){
   document.getElementById('f-desc').value=en.desc||'';
   receiptData=''; receiptInput.value=''; receiptPreview.classList.remove('show');
   if(en.receipt){
-    const url=await getReceiptUrl(en.receipt); if(url){receiptPreviewImg.src=url;receiptPreview.classList.add('show');receiptName.textContent='رسید قبلی';}
+    const url=getReceiptUrl(en.receipt); if(url){receiptPreviewImg.src=url;receiptPreview.classList.add('show');receiptName.textContent='رسید قبلی';}
   }
   document.getElementById('edit-mode').classList.add('show');document.getElementById('submit-btn').textContent='ذخیره تغییرات';document.getElementById('entry-form').scrollIntoView({behavior:'smooth',block:'start'});
 }
-async function deleteEntry(id){
-  const en=entries.find(x=>x.id===id);if(!en)return;
+function deleteEntry(id){
+  const en=entries.find(x=>x.id===id);
+  if(!en)return;
   if(!confirm('این تراکنش حذف شود؟'))return;
-  try{
-    if(currentUser){await deleteEntryRemote(en);entries=entries.filter(x=>x.id!==id);}else{entries=entries.filter(x=>x.id!==id);localSave();}
-    render();
-  }catch(err){alert('حذف ناموفق بود: '+(err.message||err));}
+  entries=entries.filter(x=>x.id!==id);
+  localSave();
+  render();
 }
+
 
 const monthFilter=document.getElementById('filter-month');
 const searchInput=document.getElementById('search-input');
@@ -1179,7 +719,7 @@ function render(){
   });
   listEl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteEntry(b.dataset.del)));
   listEl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEdit(b.dataset.edit)));
-  listEl.querySelectorAll('[data-receipt]').forEach(b=>b.addEventListener('click',async()=>{const url=await getReceiptUrl(b.dataset.receipt);if(url)openReceipt(url);else alert('رسید قابل دریافت نیست.');}));
+  listEl.querySelectorAll('[data-receipt]').forEach(b=>b.addEventListener('click',()=>{const url=getReceiptUrl(b.dataset.receipt);if(url)openReceipt(url);else alert('رسید قابل دریافت نیست.');}));
 }
 
 function openReceipt(data){receiptModalImg.src=data;receiptModal.classList.add('show');receiptModal.setAttribute('aria-hidden','false');}
@@ -1270,8 +810,8 @@ document.getElementById('export-btn').addEventListener('click', exportExcel);
 const backupRow = document.querySelector('.backup-row');
 backupRow.innerHTML = `
   <button type="button" class="backup-btn" id="export-excel-btn">دانلود اکسل</button>
-  <button type="button" class="backup-btn" id="export-json-btn">دانلود JSON</button>
-  <label class="backup-btn" for="import-file">بازیابی JSON</label>
+  <button type="button" class="backup-btn" id="export-json-btn">پشتیبان JSON</button>
+  <label class="backup-btn" for="import-file">بازیابی پشتیبان</label>
   <input type="file" id="import-file" accept="application/json,.json" style="display:none;">
 `;
 
@@ -1287,29 +827,35 @@ document.getElementById('export-json-btn').addEventListener('click', () => {
   );
 });
 
-document.getElementById('import-file').addEventListener('change', async function(e){
-  const file=e.target.files[0]; if(!file)return;
+document.getElementById('import-file').addEventListener('change', function(e){
+  const file=e.target.files[0];
+  if(!file)return;
   const reader=new FileReader();
-  reader.onload=async function(evt){
+  reader.onload=function(evt){
     try{
-      const imported=JSON.parse(evt.target.result); if(!Array.isArray(imported))throw new Error('invalid format');
-      const existingIds=new Set(entries.map(en=>en.id)); let added=0;
+      const imported=JSON.parse(evt.target.result);
+      if(!Array.isArray(imported))throw new Error('invalid format');
+      const existingIds=new Set(entries.map(en=>en.id));
+      let added=0;
       for(const en of imported){
         if(!(en&&en.id&&!existingIds.has(en.id)))continue;
         const item={...en,id:en.id,amount:Number(en.amount)||0,unit:Number(en.unit)||0};
-        if(currentUser){
-          if(item.receipt && String(item.receipt).startsWith('data:')) item.receipt=await uploadReceiptRemote(item.receipt,item.id);
-          const saved=await saveEntryRemote(item); entries.push(saved);
-        }else{entries.push(item);}
-        existingIds.add(item.id);added++;
+        entries.push(item);
+        existingIds.add(item.id);
+        added++;
       }
-      if(!currentUser)saveEntries();
-      render(); alert(`${toPersianDigits(added)} تراکنش از فایل پشتیبان اضافه شد.`);
-    }catch(err){console.error(err);alert('بازیابی فایل ناموفق بود: '+(err.message||'فرمت JSON نامعتبر است.'));}
+      localSave();
+      render();
+      alert(`${toPersianDigits(added)} تراکنش از فایل پشتیبان اضافه شد.`);
+    }catch(err){
+      console.error(err);
+      alert('بازیابی فایل ناموفق بود: '+(err.message||'فرمت JSON نامعتبر است.'));
+    }
     e.target.value='';
   };
   reader.readAsText(file);
 });
+
 
 updateAmountBox();
 updateReceiptVisibility();
@@ -1321,7 +867,6 @@ if ('serviceWorker' in navigator) {
     navigator.serviceWorker.register('service-worker.js').catch(() => {});
   });
 }
-initCloud();
 </script>
 </body>
 </html>
