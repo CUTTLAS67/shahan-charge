@@ -394,6 +394,39 @@
     margin-top:14px;
     line-height:1.7;
   }
+
+  .dashboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 18px;}
+  .dash-card{background:#fbf8ef;border:1px solid var(--paper-line);border-radius:6px;padding:12px;}
+  .dash-card .dash-title{font-size:11px;color:var(--ink-soft);margin-bottom:5px}
+  .dash-card .dash-value{font-size:17px;font-weight:800}
+  .dash-card .dash-value.negative{color:var(--withdraw)}
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}
+  .search-wrap{position:relative;}
+  .search-wrap input{padding-right:38px;}
+  .search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--ink-soft);pointer-events:none}
+  .entry-actions{display:flex;align-items:center;gap:4px;flex-shrink:0}
+  .entry-action{border:1px solid transparent;background:transparent;color:var(--ink-soft);font-family:'Vazirmatn',sans-serif;font-size:11px;cursor:pointer;padding:5px 7px;border-radius:4px}
+  .entry-action:hover{border-color:var(--paper-line);background:#f4e9d2;color:var(--brass-deep)}
+  .entry-action.danger:hover{color:var(--withdraw);}
+  .entry-meta{display:flex;gap:8px;flex-wrap:wrap;margin-top:5px}
+  .entry-receipt{display:inline-flex;align-items:center;gap:4px;font-size:11px;color:var(--brass-deep);font-weight:700;cursor:pointer;background:none;border:0;font-family:'Vazirmatn',sans-serif;padding:0}
+  .report-box{border:1px solid var(--paper-line);border-radius:6px;background:#fbf8ef;padding:12px;margin:12px 0 18px;}
+  .report-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}
+  .report-head strong{font-size:13px}
+  .report-table{width:100%;border-collapse:collapse;font-size:11px}
+  .report-table th,.report-table td{padding:7px 5px;border-bottom:1px solid var(--paper-line);text-align:center}
+  .report-table th{color:var(--ink-soft);font-weight:700}
+  .report-table tr:last-child td{border-bottom:0}
+  .edit-badge{font-size:10px;background:#ece3cc;color:var(--brass-deep);padding:2px 6px;border-radius:3px}
+  .modal-overlay{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(0,0,0,.62);backdrop-filter:blur(3px)}
+  .modal-overlay.show{display:flex}
+  .receipt-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#fbf8ef;border-radius:10px;padding:12px;box-shadow:0 25px 70px rgba(0,0,0,.4)}
+  .receipt-modal img{display:block;width:100%;max-height:72vh;object-fit:contain;border-radius:6px;background:#eee}
+  .modal-close{width:100%;margin-top:10px;padding:9px;border:1px solid var(--paper-line);background:transparent;border-radius:6px;font-family:'Vazirmatn';cursor:pointer}
+  .edit-mode{display:none;background:#f4e9d2;border:1px solid var(--brass);border-radius:5px;padding:8px 10px;margin-bottom:12px;font-size:12px;color:var(--brass-deep);align-items:center;justify-content:space-between;gap:8px}
+  .edit-mode.show{display:flex}
+  .edit-cancel{border:0;background:transparent;color:var(--withdraw);font-family:'Vazirmatn';cursor:pointer;font-size:11px}
+  @media(max-width:520px){.dashboard{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.entry{padding:10px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 6px}}
 </style>
 </head>
 <body>
@@ -410,6 +443,7 @@
 
       <p class="section-label">ثبت تراکنش جدید</p>
 
+      <div class="edit-mode" id="edit-mode"><span>در حال ویرایش تراکنش</span><button type="button" class="edit-cancel" id="edit-cancel">لغو ویرایش</button></div>
       <form id="entry-form">
         <div class="field">
           <label class="field-title">تاریخ</label>
@@ -478,7 +512,7 @@
           </div>
         </div>
 
-        <button type="submit" class="submit-btn">ثبت تراکنش</button>
+        <button type="submit" class="submit-btn" id="submit-btn">ثبت تراکنش</button>
       </form>
 
       <div class="divider" style="margin-top:26px;"></div>
@@ -498,11 +532,26 @@
         </div>
       </div>
 
+      <div class="dashboard">
+        <div class="dash-card"><div class="dash-title">تعداد تراکنش‌ها</div><div class="dash-value" id="dash-count">۰</div></div>
+        <div class="dash-card"><div class="dash-title">واحدهای دارای تراکنش</div><div class="dash-value" id="dash-units">۰</div></div>
+      </div>
+
       <div class="filter-row">
         <p class="section-label" style="border:none; padding:0; margin:0;">تراکنش‌ها</p>
-        <select id="filter-unit">
-          <option value="all">همه واحدها</option>
-        </select>
+      </div>
+      <div class="filters">
+        <select id="filter-unit"><option value="all">همه واحدها</option></select>
+        <select id="filter-month"><option value="all">همه ماه‌ها</option></select>
+      </div>
+      <div class="search-wrap">
+        <span class="search-icon">🔎</span>
+        <input type="search" id="search-input" placeholder="جستجو در توضیحات، واحد یا مبلغ...">
+      </div>
+
+      <div class="report-box" id="report-box">
+        <div class="report-head"><strong>خلاصه وضعیت واحدها</strong><span class="edit-badge" id="report-period">همه</span></div>
+        <table class="report-table"><thead><tr><th>واحد</th><th>واریز</th><th>برداشت</th><th>مانده</th></tr></thead><tbody id="report-body"></tbody></table>
       </div>
 
       <div class="backup-row">
@@ -515,7 +564,7 @@
         <div class="empty">در حال بارگذاری...</div>
       </div>
 
-      <div class="device-note">اطلاعات و تصاویر رسید فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود (بدون سرور). برای جلوگیری از از دست رفتن اطلاعات، هر از گاهی از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
+      <div class="device-note">اطلاعات و تصاویر رسید فعلاً فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود. برای جلوگیری از از دست رفتن اطلاعات، از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
 
     </div>
   </div>
@@ -539,6 +588,13 @@
       <button type="button" class="today-btn" id="calendar-today">امروز</button>
       <button type="button" id="calendar-close">بستن</button>
     </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="receipt-modal" aria-hidden="true">
+  <div class="receipt-modal" role="dialog" aria-modal="true" aria-label="مشاهده رسید">
+    <img id="receipt-modal-img" alt="رسید پرداخت">
+    <button type="button" class="modal-close" id="receipt-modal-close">بستن</button>
   </div>
 </div>
 
@@ -796,6 +852,10 @@ document.getElementById('type-withdraw').addEventListener('change',updateReceipt
 // All data is saved locally on this device using the browser's localStorage.
 // Nothing is sent to any server.
 let entries = [];
+let editingId = null;
+let searchTerm = "";
+let receiptModal = document.getElementById('receipt-modal');
+let receiptModalImg = document.getElementById('receipt-modal-img');
 
 function saveEntries(){
   try{
@@ -803,7 +863,7 @@ function saveEntries(){
     return true;
   }catch(e){
     console.error('storage error', e);
-    alert('ذخیره‌سازی با مشکل مواجه شد. لطفاً از حافظه‌ی گوشی مطمئن شوید و دوباره تلاش کنید.');
+    alert('حافظه مرورگر پر شده است. لطفاً از اطلاعات پشتیبان JSON بگیرید و رسیدهای خیلی بزرگ را حذف کنید.');
     return false;
   }
 }
@@ -819,109 +879,148 @@ function loadEntries(){
   render();
 }
 
-// ---- Form submit ----
+// ---- Form submit / edit ----
 document.getElementById('entry-form').addEventListener('submit', function(e){
   e.preventDefault();
-
   let amount;
   if(amountOther.checked){
     amount = parseInt(customInput.value, 10);
-    if(!amount || amount <= 0){
-      customInput.focus();
-      return;
-    }
-  } else {
-    amount = 400000;
-  }
+    if(!amount || amount <= 0){ customInput.focus(); return; }
+  } else amount = 400000;
 
   const type = document.querySelector('input[name="f-type"]:checked').value;
   const unit = unitEl.value;
-  const day = dayEl.value;
-  const month = monthEl.value;
-  const year = yearEl.value;
+  const day = dayEl.value, month = monthEl.value, year = yearEl.value;
   const desc = document.getElementById('f-desc').value.trim();
-
+  const old = editingId ? entries.find(en => en.id === editingId) : null;
   const entry = {
-    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-    day: parseInt(day, 10),
-    month: parseInt(month, 10),
-    year: parseInt(year, 10),
-    unit: parseInt(unit, 10),
-    amount,
-    type,
-    desc,
-    receipt: receiptData || '',
-    createdAt: Date.now()
+    id: editingId || (Date.now().toString(36) + Math.random().toString(36).slice(2, 6)),
+    day: parseInt(day,10), month: parseInt(month,10), year: parseInt(year,10),
+    unit: parseInt(unit,10), amount, type, desc,
+    receipt: receiptData || (old ? old.receipt || '' : ''),
+    createdAt: old ? old.createdAt : Date.now(), updatedAt: Date.now()
   };
-
-  entries.push(entry);
-  saveEntries();
-  render();
-
-  customInput.value = '';
-  document.getElementById('f-desc').value = '';
-  clearReceipt();
+  if(editingId){ entries = entries.map(en => en.id === editingId ? entry : en); }
+  else entries.push(entry);
+  if(!saveEntries()) return;
+  resetForm(); render();
 });
 
-// ---- Delete entry ----
+function resetForm(){
+  editingId=null;
+  document.getElementById('entry-form').reset();
+  setSelectedDate(getTodayJalali());
+  amountFixed.checked=true;
+  updateAmountBox();
+  document.getElementById('type-deposit').checked=true;
+  updateReceiptVisibility();
+  clearReceipt();
+  document.getElementById('edit-mode').classList.remove('show');
+  document.getElementById('submit-btn').textContent='ثبت تراکنش';
+}
+
+function startEdit(id){
+  const en=entries.find(x=>x.id===id); if(!en)return;
+  editingId=id;
+  setSelectedDate({day:en.day,month:en.month,year:en.year});
+  unitEl.value=String(en.unit);
+  if(en.amount===400000){amountFixed.checked=true; amountOther.checked=false;}else{amountFixed.checked=false; amountOther.checked=true; customInput.value=en.amount;}
+  updateAmountBox();
+  document.querySelector(`input[name="f-type"][value="${en.type}"]`).checked=true;
+  updateReceiptVisibility();
+  document.getElementById('f-desc').value=en.desc||'';
+  receiptData=en.receipt||'';
+  if(receiptData){receiptPreviewImg.src=receiptData;receiptPreview.classList.add('show');receiptName.textContent='رسید قبلی';}
+  document.getElementById('edit-mode').classList.add('show');
+  document.getElementById('submit-btn').textContent='ذخیره تغییرات';
+  document.getElementById('entry-form').scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+document.getElementById('edit-cancel').addEventListener('click',resetForm);
+
+// ---- Delete / edit actions ----
 function deleteEntry(id){
-  entries = entries.filter(en => en.id !== id);
+  const en=entries.find(x=>x.id===id); if(!en)return;
+  if(!confirm(`تراکنش واحد ${toPersianDigits(en.unit)} به مبلغ ${formatAmount(en.amount)} حذف شود؟`)) return;
+  entries = entries.filter(x=>x.id!==id);
   saveEntries();
+  if(editingId===id) resetForm();
   render();
 }
 
 filterUnitEl.addEventListener('change', render);
 
-// ---- Render ----
-function render(){
-  const filterVal = filterUnitEl.value;
-  const filtered = filterVal === 'all' ? entries : entries.filter(en => String(en.unit) === filterVal);
+// ---- Filters / report / render ----
+const monthFilter=document.getElementById('filter-month');
+const searchInput=document.getElementById('search-input');
+for(let m=1;m<=12;m++){
+  const o=document.createElement('option'); o.value=String(m); o.textContent=PERSIAN_MONTHS[m-1]; monthFilter.appendChild(o);
+}
+filterUnitEl.addEventListener('change', render);
+monthFilter.addEventListener('change', render);
+searchInput.addEventListener('input', ()=>{searchTerm=searchInput.value.trim().toLowerCase();render();});
 
-  let sumDeposit = 0, sumWithdraw = 0;
-  filtered.forEach(en => {
-    if(en.type === 'deposit') sumDeposit += en.amount;
-    else sumWithdraw += en.amount;
-  });
-  document.getElementById('sum-deposit').textContent = formatAmount(sumDeposit);
-  document.getElementById('sum-withdraw').textContent = formatAmount(sumWithdraw);
-  document.getElementById('sum-balance').textContent = formatAmount(sumDeposit - sumWithdraw);
+function entryMatches(en){
+  const unitOk=filterUnitEl.value==='all'||String(en.unit)===filterUnitEl.value;
+  const monthOk=monthFilter.value==='all'||String(en.month)===monthFilter.value;
+  if(!unitOk||!monthOk)return false;
+  if(!searchTerm)return true;
+  const hay=`${en.unit} ${en.amount} ${en.desc||''} ${en.type==='deposit'?'واریز':'برداشت'} ${en.day}/${en.month}/${en.year}`.toLowerCase();
+  return hay.includes(searchTerm);
+}
 
-  const listEl = document.getElementById('entries-list');
-  listEl.innerHTML = '';
-
-  if(filtered.length === 0){
-    listEl.innerHTML = '<div class="empty">هنوز تراکنشی ثبت نشده است.</div>';
-    return;
+function renderReport(){
+  const reportBody=document.getElementById('report-body');
+  const period=monthFilter.value==='all'?'همه ماه‌ها':PERSIAN_MONTHS[Number(monthFilter.value)-1];
+  document.getElementById('report-period').textContent=period;
+  const rows=[];
+  for(let u=1;u<=9;u++){
+    let dep=0, wit=0;
+    entries.forEach(en=>{
+      if(en.unit!==u)return;
+      if(monthFilter.value!=='all' && String(en.month)!==monthFilter.value)return;
+      if(en.type==='deposit')dep+=Number(en.amount)||0; else wit+=Number(en.amount)||0;
+    });
+    if(dep||wit)rows.push(`<tr><td>واحد ${toPersianDigits(u)}</td><td>${formatAmount(dep)}</td><td>${formatAmount(wit)}</td><td class="${dep-wit<0?'negative':''}">${formatAmount(dep-wit)}</td></tr>`);
   }
+  reportBody.innerHTML=rows.length?rows.join(''):'<tr><td colspan="4">اطلاعاتی برای نمایش وجود ندارد.</td></tr>';
+}
 
-  const sorted = [...filtered].sort((a, b) => b.createdAt - a.createdAt);
+function render(){
+  const filtered=entries.filter(entryMatches);
+  let sumDeposit=0,sumWithdraw=0;
+  filtered.forEach(en=>en.type==='deposit'?sumDeposit+=Number(en.amount)||0:sumWithdraw+=Number(en.amount)||0);
+  document.getElementById('sum-deposit').textContent=formatAmount(sumDeposit);
+  document.getElementById('sum-withdraw').textContent=formatAmount(sumWithdraw);
+  document.getElementById('sum-balance').textContent=formatAmount(sumDeposit-sumWithdraw);
+  document.getElementById('dash-count').textContent=toPersianDigits(filtered.length);
+  document.getElementById('dash-units').textContent=toPersianDigits(new Set(filtered.map(en=>en.unit)).size);
+  renderReport();
 
-  sorted.forEach(en => {
-    const div = document.createElement('div');
-    div.className = 'entry';
-    const dateStr = toPersianDigits(en.day) + ' ' + PERSIAN_MONTHS[en.month - 1] + ' ' + toPersianDigits(en.year);
-    div.innerHTML = `
+  const listEl=document.getElementById('entries-list'); listEl.innerHTML='';
+  if(!filtered.length){listEl.innerHTML='<div class="empty">تراکنشی با این فیلتر پیدا نشد.</div>';return;}
+  [...filtered].sort((a,b)=>(b.createdAt||0)-(a.createdAt||0)).forEach(en=>{
+    const div=document.createElement('div'); div.className='entry';
+    const dateStr=toPersianDigits(en.day)+' '+PERSIAN_MONTHS[en.month-1]+' '+toPersianDigits(en.year);
+    div.innerHTML=`
       <div class="entry-main">
-        <div class="entry-top">
-          <span class="entry-type ${en.type === 'deposit' ? 'deposit' : 'withdraw'}">${en.type === 'deposit' ? 'واریز' : 'برداشت'}</span>
-          <span class="entry-unit">واحد ${toPersianDigits(en.unit)}</span>
-          <span class="entry-date">${dateStr}</span>
-        </div>
-        ${en.desc ? `<div class="entry-desc">${escapeHtml(en.desc)}</div>` : ''}
-        ${en.receipt ? `<a class="receipt-link" href="${en.receipt}" target="_blank" rel="noopener">🧾 مشاهده رسید پرداخت</a>` : ''}
+        <div class="entry-top"><span class="entry-type ${en.type==='deposit'?'deposit':'withdraw'}">${en.type==='deposit'?'واریز':'برداشت'}</span><span class="entry-unit">واحد ${toPersianDigits(en.unit)}</span><span class="entry-date">${dateStr}</span></div>
+        ${en.desc?`<div class="entry-desc">${escapeHtml(en.desc)}</div>`:''}
+        <div class="entry-meta">${en.receipt?`<button class="entry-receipt" data-receipt="${escapeHtml(en.receipt)}">🧾 مشاهده رسید</button>`:''}</div>
       </div>
-      <div style="display:flex; align-items:center; gap:10px;">
-        <div class="entry-amount ${en.type === 'deposit' ? 'deposit' : 'withdraw'}">${formatAmount(en.amount)}</div>
-        <button class="entry-del" data-id="${en.id}" title="حذف">حذف</button>
-      </div>
-    `;
+      <div class="entry-actions"><div class="entry-amount ${en.type==='deposit'?'deposit':'withdraw'}">${formatAmount(en.amount)}</div><button class="entry-action" data-edit="${en.id}">ویرایش</button><button class="entry-action danger" data-del="${en.id}">حذف</button></div>`;
     listEl.appendChild(div);
   });
-
-  listEl.querySelectorAll('.entry-del').forEach(btn => {
-    btn.addEventListener('click', () => deleteEntry(btn.getAttribute('data-id')));
-  });
+  listEl.querySelectorAll('[data-del]').forEach(b=>b.addEventListener('click',()=>deleteEntry(b.dataset.del)));
+  listEl.querySelectorAll('[data-edit]').forEach(b=>b.addEventListener('click',()=>startEdit(b.dataset.edit)));
+  listEl.querySelectorAll('[data-receipt]').forEach(b=>b.addEventListener('click',()=>openReceipt(b.dataset.receipt)));
 }
+
+function openReceipt(data){receiptModalImg.src=data;receiptModal.classList.add('show');receiptModal.setAttribute('aria-hidden','false');}
+function closeReceipt(){receiptModal.classList.remove('show');receiptModal.setAttribute('aria-hidden','true');receiptModalImg.removeAttribute('src');}
+document.getElementById('receipt-modal-close').addEventListener('click',closeReceipt);
+receiptModal.addEventListener('click',e=>{if(e.target===receiptModal)closeReceipt();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCalendar();closeReceipt();}});
 
 function escapeHtml(str){
   const d = document.createElement('div');
@@ -962,14 +1061,15 @@ function htmlEscape(value){
 }
 
 function exportExcel(){
-  const rows = [['تاریخ','واحد','مبلغ (تومان)','نوع','توضیحات']];
+  const rows = [['تاریخ','واحد','مبلغ (تومان)','نوع','توضیحات','رسید']];
   [...entries].reverse().forEach(en => {
     rows.push([
       `${en.day}/${en.month}/${en.year}`,
       'واحد ' + en.unit,
       en.amount,
       en.type === 'deposit' ? 'واریز' : 'برداشت',
-      en.desc || ''
+      en.desc || '',
+      en.receipt ? 'دارد' : 'ندارد'
     ]);
   });
 
@@ -1033,7 +1133,7 @@ document.getElementById('import-file').addEventListener('change', function(e){
       let added = 0;
       imported.forEach(en => {
         if(en && en.id && !existingIds.has(en.id)){
-          entries.push(en);
+          entries.push({...en, amount:Number(en.amount)||0, unit:Number(en.unit)||0});
           existingIds.add(en.id);
           added++;
         }
