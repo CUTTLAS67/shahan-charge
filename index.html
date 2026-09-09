@@ -117,11 +117,11 @@
   .empty{text-align:center;padding:28px 10px;color:var(--ink-soft);font-size:13px;}
   .backup-row{display:flex;gap:9px;margin:16px 0 18px;}.backup-btn{flex:1;text-align:center;padding:10px;border:1px solid #d8cba7;border-radius:10px;background:#fffdf8;color:var(--navy-2);font-size:11px;font-weight:800;cursor:pointer;transition:.18s;}.backup-btn:hover{border-color:var(--gold);color:var(--gold-deep);background:#fff9ea;transform:translateY(-1px);}
   .device-note{text-align:center;font-size:10px;color:var(--ink-soft);margin-top:14px;line-height:1.8;}
-  .dashboard{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin:0 0 18px;}.dash-card{border-radius:13px;padding:13px;}.dash-card .dash-title{font-size:10px;color:var(--ink-soft);margin-bottom:5px;font-weight:700}.dash-card .dash-value{font-size:16px;font-weight:900;color:var(--navy-2)}.dash-card .dash-value.negative{color:var(--withdraw)}
-  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.search-wrap{position:relative;}.search-wrap input{padding-right:38px;}.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--gold-deep);pointer-events:none;}.report-box{border-radius:13px;padding:13px;margin:12px 0 18px;}.report-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.report-head strong{font-size:12px;color:var(--navy-2)}.report-table{width:100%;border-collapse:collapse;font-size:10px}.report-table th,.report-table td{padding:7px 5px;border-bottom:1px solid var(--paper-line);text-align:center}.report-table th{color:var(--ink-soft);font-weight:800}.report-table tr:last-child td{border-bottom:0}.edit-badge{font-size:9px;background:#f4ead0;color:var(--gold-deep);padding:3px 7px;border-radius:999px;font-weight:700;}
+  .dashboard{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 18px}.dash-card{border-radius:13px;padding:13px;cursor:default}.dash-card.clickable{cursor:pointer;transition:.18s}.dash-card.clickable:hover{transform:translateY(-2px);border-color:var(--gold);box-shadow:0 10px 24px rgba(19,34,56,.10)}.dash-card .dash-title{font-size:10px;color:var(--ink-soft);margin-bottom:5px;font-weight:700}.dash-card .dash-value{font-size:16px;font-weight:900;color:var(--navy-2)}.dash-card .dash-value.negative{color:var(--withdraw)}.dash-card.unpaid .dash-value{color:var(--withdraw)}.dash-hint{font-size:9px;color:var(--gold-deep);margin-top:4px;font-weight:800}
+  .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 14px}.search-wrap{position:relative;}.search-wrap input{padding-right:38px;}.search-icon{position:absolute;right:12px;top:50%;transform:translateY(-50%);font-size:14px;color:var(--gold-deep);pointer-events:none;}.report-box{border-radius:13px;padding:13px;margin:12px 0 18px;}.unpaid-box{display:none;border-radius:13px;padding:13px;margin:12px 0 18px;background:rgba(255,253,248,.96);border:1px solid #e1d6b9;box-shadow:0 6px 18px rgba(19,34,56,.06)}.unpaid-box.show{display:block}.unpaid-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:10px 0 12px}.unpaid-controls select{width:100%}.unpaid-note{font-size:10px;color:var(--ink-soft);line-height:1.8;margin:0 0 8px}.unpaid-table{width:100%;border-collapse:collapse;font-size:10px}.unpaid-table th,.unpaid-table td{padding:8px 5px;border-bottom:1px solid var(--paper-line);text-align:center}.unpaid-table th{color:var(--ink-soft);font-weight:800}.unpaid-table tr:last-child td{border-bottom:0}.unpaid-status{color:var(--withdraw);font-weight:900}.unpaid-expected{direction:ltr;font-weight:800;color:var(--navy-2)}.report-head{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:8px}.report-head strong{font-size:12px;color:var(--navy-2)}.report-table{width:100%;border-collapse:collapse;font-size:10px}.report-table th,.report-table td{padding:7px 5px;border-bottom:1px solid var(--paper-line);text-align:center}.report-table th{color:var(--ink-soft);font-weight:800}.report-table tr:last-child td{border-bottom:0}.edit-badge{font-size:9px;background:#f4ead0;color:var(--gold-deep);padding:3px 7px;border-radius:999px;font-weight:700;}
   .modal-overlay{position:fixed;inset:0;z-index:1100;display:none;align-items:center;justify-content:center;padding:16px;background:rgba(3,12,25,.74);}.modal-overlay.show{display:flex}.receipt-modal{width:min(560px,100%);max-height:90vh;overflow:auto;background:#fffdf8;border-radius:16px;padding:12px;box-shadow:0 30px 80px rgba(0,0,0,.5)}.receipt-modal img{display:block;width:100%;max-height:72vh;object-fit:contain;border-radius:10px;background:#eee}.modal-close{width:100%;margin-top:10px;padding:10px;border:1px solid #d8cba7;background:#fffdf8;color:var(--navy-2);border-radius:10px;cursor:pointer;font-weight:800}.modal-close:hover{border-color:var(--gold);background:#fff8e8;}
   .edit-mode{display:none;background:#fff7df;border:1px solid var(--gold);border-radius:10px;padding:9px 11px;margin-bottom:12px;font-size:11px;color:var(--gold-deep);align-items:center;justify-content:space-between;gap:8px}.edit-mode.show{display:flex}.edit-cancel{border:0;background:transparent;color:var(--withdraw);cursor:pointer;font-size:10px;font-weight:700}
-  @media(max-width:520px){body{padding:20px 10px 45px}.book-inner{padding:24px 17px 20px}.cover-title h1{font-size:25px}.shahan-logo{width:min(185px,58vw)}dashboard{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr}.entry{padding:11px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 5px}.total-card .t-value{font-size:13px}}
+  @media(max-width:520px){body{padding:20px 10px 45px}.book-inner{padding:24px 17px 20px}.cover-title h1{font-size:25px}.shahan-logo{width:min(185px,58vw)}.dashboard{grid-template-columns:1fr 1fr}.dashboard .dash-card.unpaid{grid-column:1 / -1}.filters{grid-template-columns:1fr}.unpaid-controls{grid-template-columns:1fr}.entry{padding:11px}.entry-actions{flex-direction:column}.entry-action{width:100%}.totals{gap:6px}.total-card{padding:10px 5px}.total-card .t-value{font-size:13px}}
 </style>
 </head>
 <body>
@@ -231,6 +231,21 @@
       <div class="dashboard">
         <div class="dash-card"><div class="dash-title">تعداد تراکنش‌ها</div><div class="dash-value" id="dash-count">۰</div></div>
         <div class="dash-card"><div class="dash-title">واحدهای دارای تراکنش</div><div class="dash-value" id="dash-units">۰</div></div>
+        <div class="dash-card clickable unpaid" id="unpaid-card" role="button" tabindex="0" aria-expanded="false">
+          <div class="dash-title">واحدهای پرداخت‌نشده</div>
+          <div class="dash-value" id="dash-unpaid">۰</div>
+          <div class="dash-hint">مشاهده جدول و انتخاب ماه</div>
+        </div>
+      </div>
+
+      <div class="unpaid-box" id="unpaid-box">
+        <div class="report-head"><strong>واحدهایی که شارژ ماه را پرداخت نکرده‌اند</strong><span class="edit-badge" id="unpaid-period">ماه جاری</span></div>
+        <div class="unpaid-controls">
+          <select id="unpaid-year" aria-label="انتخاب سال"></select>
+          <select id="unpaid-month" aria-label="انتخاب ماه"><option value="all">انتخاب ماه</option></select>
+        </div>
+        <p class="unpaid-note">ملاک پرداخت، وجود حداقل یک تراکنش «واریز» برای همان واحد در ماه و سال انتخاب‌شده است.</p>
+        <table class="unpaid-table"><thead><tr><th>واحد</th><th>وضعیت</th><th>شارژ مورد انتظار</th></tr></thead><tbody id="unpaid-body"></tbody></table>
       </div>
 
       <div class="filter-row">
@@ -663,6 +678,58 @@ function entryMatches(en){
   return hay.includes(searchTerm);
 }
 
+// ---- Monthly unpaid units ----
+const unpaidCard=document.getElementById('unpaid-card');
+const unpaidBox=document.getElementById('unpaid-box');
+const unpaidYearEl=document.getElementById('unpaid-year');
+const unpaidMonthEl=document.getElementById('unpaid-month');
+const unpaidBody=document.getElementById('unpaid-body');
+const unpaidPeriod=document.getElementById('unpaid-period');
+const MONTHLY_CHARGE=400000;
+
+for(let m=1;m<=12;m++){
+  const o=document.createElement('option'); o.value=String(m); o.textContent=PERSIAN_MONTHS[m-1]; unpaidMonthEl.appendChild(o);
+}
+function refreshUnpaidYears(){
+  const current=Number(getTodayJalali().year);
+  const years=new Set([current,current-1,current+1]);
+  entries.forEach(en=>{if(en&&en.year)years.add(Number(en.year));});
+  const sorted=[...years].filter(Boolean).sort((a,b)=>b-a);
+  const prev=unpaidYearEl.value;
+  unpaidYearEl.innerHTML=sorted.map(y=>`<option value="${y}">${toPersianDigits(y)}</option>`).join('');
+  unpaidYearEl.value=sorted.includes(Number(prev))?prev:String(current);
+}
+function getUnpaidUnits(){
+  const year=Number(unpaidYearEl.value);
+  const month=Number(unpaidMonthEl.value);
+  const paidUnits=new Set(entries.filter(en=>Number(en.year)===year && Number(en.month)===month && en.type==='deposit').map(en=>Number(en.unit)));
+  return Array.from({length:9},(_,i)=>i+1).filter(u=>!paidUnits.has(u));
+}
+function renderUnpaidUnits(){
+  const year=Number(unpaidYearEl.value);
+  const month=Number(unpaidMonthEl.value);
+  if(!year || !month){
+    unpaidBody.innerHTML='<tr><td colspan="3">لطفاً سال و ماه را انتخاب کنید.</td></tr>';
+    document.getElementById('dash-unpaid').textContent='—';
+    unpaidPeriod.textContent='انتخاب نشده';
+    return;
+  }
+  const unpaid=getUnpaidUnits();
+  document.getElementById('dash-unpaid').textContent=toPersianDigits(unpaid.length);
+  unpaidPeriod.textContent=`${PERSIAN_MONTHS[month-1]} ${toPersianDigits(year)}`;
+  unpaidBody.innerHTML=unpaid.length?unpaid.map(u=>`<tr><td>واحد ${toPersianDigits(u)}</td><td class="unpaid-status">پرداخت نشده</td><td class="unpaid-expected">${formatAmount(MONTHLY_CHARGE)}</td></tr>`).join(''):'<tr><td colspan="3" style="color:var(--deposit);font-weight:900">همه واحدها شارژ این ماه را پرداخت کرده‌اند.</td></tr>';
+}
+function toggleUnpaidBox(){
+  const show=!unpaidBox.classList.contains('show');
+  unpaidBox.classList.toggle('show',show);
+  unpaidCard.setAttribute('aria-expanded',String(show));
+  if(show){refreshUnpaidYears();renderUnpaidUnits();unpaidBox.scrollIntoView({behavior:'smooth',block:'nearest'});}
+}
+unpaidCard.addEventListener('click',toggleUnpaidBox);
+unpaidCard.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();toggleUnpaidBox();}});
+unpaidYearEl.addEventListener('change',renderUnpaidUnits);
+unpaidMonthEl.addEventListener('change',renderUnpaidUnits);
+
 function renderReport(){
   const reportBody=document.getElementById('report-body');
   const period=monthFilter.value==='all'?'همه ماه‌ها':PERSIAN_MONTHS[Number(monthFilter.value)-1];
@@ -693,6 +760,9 @@ function sortByTransactionDate(list){
 }
 
 function render(){
+  refreshUnpaidYears();
+  if(!unpaidMonthEl.value || unpaidMonthEl.value==='all') unpaidMonthEl.value=String(today.month);
+  if(!unpaidYearEl.value) unpaidYearEl.value=String(today.year);
   const filtered=entries.filter(entryMatches);
   let sumDeposit=0,sumWithdraw=0;
   filtered.forEach(en=>en.type==='deposit'?sumDeposit+=Number(en.amount)||0:sumWithdraw+=Number(en.amount)||0);
@@ -702,6 +772,7 @@ function render(){
   document.getElementById('dash-count').textContent=toPersianDigits(filtered.length);
   document.getElementById('dash-units').textContent=toPersianDigits(new Set(filtered.map(en=>en.unit)).size);
   renderReport();
+  renderUnpaidUnits();
 
   const listEl=document.getElementById('entries-list'); listEl.innerHTML='';
   if(!filtered.length){listEl.innerHTML='<div class="empty">تراکنشی با این فیلتر پیدا نشد.</div>';return;}
