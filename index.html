@@ -1,0 +1,776 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>دفتر شارژ ساختمان شاهان</title>
+
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#1c2b24">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="شارژ شاهان">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="icon" href="icon-192.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --cover:#1c2b24;
+    --cover-2:#16221c;
+    --paper:#efe9d8;
+    --paper-line:#d9cfb2;
+    --ink:#241f16;
+    --ink-soft:#5b5240;
+    --brass:#a9803f;
+    --brass-deep:#8a6a34;
+    --deposit:#2f6b4f;
+    --withdraw:#a3432d;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{
+    background:
+      radial-gradient(1200px 600px at 50% -10%, #26382f 0%, var(--cover) 55%, var(--cover-2) 100%);
+    min-height:100vh;
+    font-family:'Vazirmatn', sans-serif;
+    color:var(--ink);
+    padding:36px 16px 64px;
+  }
+
+  .wrap{max-width:640px; margin:0 auto;}
+
+  .cover-title{
+    text-align:center;
+    color:#efe9d8;
+    margin-bottom:26px;
+  }
+  .cover-title .eyebrow{
+    display:block;
+    font-size:13px;
+    color:#b7ad8f;
+    letter-spacing:0.02em;
+    margin-bottom:8px;
+  }
+  .cover-title h1{
+    margin:0;
+    font-size:30px;
+    font-weight:800;
+    color:#f4efdf;
+  }
+  .cover-title .sub{
+    margin-top:8px;
+    font-size:14px;
+    color:#9fb0a5;
+  }
+
+  .book{
+    background:var(--paper);
+    border-radius:6px;
+    box-shadow: 0 30px 60px -20px rgba(0,0,0,0.55), inset 0 0 0 1px rgba(0,0,0,0.06);
+    position:relative;
+    overflow:hidden;
+  }
+  .book::before{
+    content:"";
+    position:absolute;
+    top:0; right:0; bottom:0;
+    width:14px;
+    background:linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0));
+  }
+
+  .book-inner{ padding:28px 26px 24px; }
+
+  .section-label{
+    font-size:12px;
+    color:var(--brass-deep);
+    font-weight:600;
+    margin:0 0 10px;
+    padding-bottom:8px;
+    border-bottom:1px solid var(--paper-line);
+  }
+
+  .field{ margin-bottom:20px; }
+  .field label.field-title{
+    display:block;
+    font-size:14px;
+    font-weight:600;
+    color:var(--ink);
+    margin-bottom:8px;
+  }
+
+  .date-row{ display:flex; gap:8px; }
+  select, input[type="number"], input[type="text"], textarea{
+    font-family:'Vazirmatn', sans-serif;
+    background:#fbf8ef;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:10px 12px;
+    font-size:15px;
+    color:var(--ink);
+    width:100%;
+    outline:none;
+  }
+  select:focus, input:focus, textarea:focus{
+    border-color:var(--brass);
+    box-shadow:0 0 0 3px rgba(169,128,63,0.18);
+  }
+  .date-row select{ flex:1; }
+
+  .unit-select{ max-width:180px; }
+
+  .choice-row{
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+  }
+  .choice{
+    flex:1;
+    min-width:130px;
+    position:relative;
+  }
+  .choice input{ position:absolute; opacity:0; }
+  .choice label{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:6px;
+    text-align:center;
+    padding:11px 10px;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    background:#fbf8ef;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+    color:var(--ink-soft);
+    transition:border-color .15s, color .15s, background .15s;
+  }
+  .choice input:checked + label{
+    border-color:var(--brass);
+    background:#f4e9d2;
+    color:var(--brass-deep);
+  }
+  .choice.type-deposit input:checked + label{
+    border-color:var(--deposit);
+    background:#e4efe8;
+    color:var(--deposit);
+  }
+  .choice.type-withdraw input:checked + label{
+    border-color:var(--withdraw);
+    background:#f3e5e0;
+    color:var(--withdraw);
+  }
+
+  .custom-amount{
+    margin-top:10px;
+    display:none;
+  }
+  .custom-amount.show{ display:block; }
+  .amount-suffix{
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .amount-suffix span{ font-size:13px; color:var(--ink-soft); white-space:nowrap; }
+
+  textarea{ resize:vertical; min-height:70px; }
+
+  .submit-btn{
+    width:100%;
+    padding:13px;
+    border:none;
+    border-radius:4px;
+    background:var(--brass-deep);
+    color:#f8f3e4;
+    font-family:'Vazirmatn', sans-serif;
+    font-size:15px;
+    font-weight:700;
+    cursor:pointer;
+    transition:background .15s, transform .05s;
+  }
+  .submit-btn:hover{ background:#77592b; }
+  .submit-btn:active{ transform:scale(0.99); }
+
+  .divider{
+    height:1px;
+    background:repeating-linear-gradient(90deg, var(--paper-line) 0 6px, transparent 6px 12px);
+    margin:6px 0 22px;
+  }
+
+  .totals{
+    display:grid;
+    grid-template-columns:repeat(3, 1fr);
+    gap:10px;
+    margin-bottom:20px;
+  }
+  .total-card{
+    background:#fbf8ef;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:12px 10px;
+    text-align:center;
+  }
+  .total-card .t-label{ font-size:12px; color:var(--ink-soft); margin-bottom:6px; }
+  .total-card .t-value{ font-size:16px; font-weight:800; direction:ltr; }
+  .total-card.deposit .t-value{ color:var(--deposit); }
+  .total-card.withdraw .t-value{ color:var(--withdraw); }
+  .total-card.balance .t-value{ color:var(--brass-deep); }
+
+  .filter-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:12px;
+  }
+  .filter-row select{ max-width:170px; }
+
+  .entries{ display:flex; flex-direction:column; gap:8px; }
+  .entry{
+    background:#fbf8ef;
+    border:1px solid var(--paper-line);
+    border-radius:4px;
+    padding:12px 14px;
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+  }
+  .entry-main{ flex:1; min-width:0; }
+  .entry-top{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-bottom:4px;
+  }
+  .entry-type{
+    font-size:11px;
+    font-weight:700;
+    padding:2px 8px;
+    border-radius:3px;
+  }
+  .entry-type.deposit{ background:#e4efe8; color:var(--deposit); }
+  .entry-type.withdraw{ background:#f3e5e0; color:var(--withdraw); }
+  .entry-unit{ font-size:13px; font-weight:600; color:var(--ink); }
+  .entry-date{ font-size:12px; color:var(--ink-soft); }
+  .entry-desc{ font-size:13px; color:var(--ink-soft); margin-top:3px; }
+  .entry-amount{
+    font-size:15px;
+    font-weight:800;
+    white-space:nowrap;
+    direction:ltr;
+  }
+  .entry-amount.deposit{ color:var(--deposit); }
+  .entry-amount.withdraw{ color:var(--withdraw); }
+  .entry-del{
+    border:none;
+    background:none;
+    color:#b98a7a;
+    font-size:13px;
+    cursor:pointer;
+    padding:4px;
+    flex-shrink:0;
+  }
+  .entry-del:hover{ color:var(--withdraw); }
+
+  .empty{
+    text-align:center;
+    padding:24px 10px;
+    color:var(--ink-soft);
+    font-size:14px;
+  }
+
+  .backup-row{
+    display:flex;
+    gap:10px;
+    margin:16px 0 18px;
+  }
+  .backup-btn{
+    flex:1;
+    text-align:center;
+    padding:9px 10px;
+    border:1px dashed var(--paper-line);
+    border-radius:4px;
+    background:transparent;
+    color:var(--ink-soft);
+    font-family:'Vazirmatn', sans-serif;
+    font-size:12px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .backup-btn:hover{
+    border-color:var(--brass);
+    color:var(--brass-deep);
+  }
+
+  .device-note{
+    text-align:center;
+    font-size:11px;
+    color:var(--ink-soft);
+    margin-top:14px;
+    line-height:1.7;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="cover-title">
+    <span class="eyebrow">دفتر حساب</span>
+    <h1>شارژ ساختمان شاهان</h1>
+    <div class="sub">ثبت واریز و برداشت واحدها</div>
+  </div>
+
+  <div class="book">
+    <div class="book-inner">
+
+      <p class="section-label">ثبت تراکنش جدید</p>
+
+      <form id="entry-form">
+        <div class="field">
+          <label class="field-title">تاریخ</label>
+          <div class="date-row">
+            <select id="f-day"></select>
+            <select id="f-month"></select>
+            <select id="f-year"></select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-title">شماره واحد</label>
+          <select id="f-unit" class="unit-select"></select>
+        </div>
+
+        <div class="field">
+          <label class="field-title">مبلغ</label>
+          <div class="choice-row">
+            <div class="choice">
+              <input type="radio" name="amount-choice" id="amount-fixed" value="fixed" checked>
+              <label for="amount-fixed">۴۰۰٬۰۰۰ تومان</label>
+            </div>
+            <div class="choice">
+              <input type="radio" name="amount-choice" id="amount-other" value="other">
+              <label for="amount-other">دیگر</label>
+            </div>
+          </div>
+          <div class="custom-amount" id="custom-amount-box">
+            <div class="amount-suffix">
+              <input type="number" id="f-amount-custom" placeholder="مبلغ را وارد کنید" min="1" inputmode="numeric">
+              <span>تومان</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-title">نوع تراکنش</label>
+          <div class="choice-row">
+            <div class="choice type-deposit">
+              <input type="radio" name="f-type" id="type-deposit" value="deposit" checked>
+              <label for="type-deposit">واریز</label>
+            </div>
+            <div class="choice type-withdraw">
+              <input type="radio" name="f-type" id="type-withdraw" value="withdraw">
+              <label for="type-withdraw">برداشت</label>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-title" for="f-desc">توضیحات</label>
+          <textarea id="f-desc" placeholder="مثلاً: بابت شارژ مرداد ماه..."></textarea>
+        </div>
+
+        <button type="submit" class="submit-btn">ثبت تراکنش</button>
+      </form>
+
+      <div class="divider" style="margin-top:26px;"></div>
+
+      <div class="totals">
+        <div class="total-card deposit">
+          <div class="t-label">مجموع واریز</div>
+          <div class="t-value" id="sum-deposit">۰</div>
+        </div>
+        <div class="total-card withdraw">
+          <div class="t-label">مجموع برداشت</div>
+          <div class="t-value" id="sum-withdraw">۰</div>
+        </div>
+        <div class="total-card balance">
+          <div class="t-label">مانده</div>
+          <div class="t-value" id="sum-balance">۰</div>
+        </div>
+      </div>
+
+      <div class="filter-row">
+        <p class="section-label" style="border:none; padding:0; margin:0;">تراکنش‌ها</p>
+        <select id="filter-unit">
+          <option value="all">همه واحدها</option>
+        </select>
+      </div>
+
+      <div class="backup-row">
+        <button type="button" class="backup-btn" id="export-btn">دانلود اکسل</button>
+        <label class="backup-btn" for="import-file">بازیابی (JSON)</label>
+        <input type="file" id="import-file" accept="application/json" style="display:none;">
+      </div>
+
+      <div class="entries" id="entries-list">
+        <div class="empty">در حال بارگذاری...</div>
+      </div>
+
+      <div class="device-note">اطلاعات فقط روی همین گوشی و در همین مرورگر ذخیره می‌شود (بدون سرور). اگر حافظه‌ی مرورگر پاک شود، اطلاعات از بین می‌رود؛ پس هر از گاهی از «دانلود JSON» نسخه پشتیبان بگیرید.</div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+const PERSIAN_MONTHS = ["فروردین","اردیبهشت","خرداد","تیر","مرداد","شهریور","مهر","آبان","آذر","دی","بهمن","اسفند"];
+const PERSIAN_DIGITS = ["۰","۱","۲","۳","۴","۵","۶","۷","۸","۹"];
+const STORAGE_KEY = "shahan-charge-entries";
+
+function toPersianDigits(str){
+  return String(str).replace(/[0-9]/g, d => PERSIAN_DIGITS[d]);
+}
+
+function formatAmount(n){
+  return toPersianDigits(Number(n).toLocaleString('en-US'));
+}
+
+function getTodayJalali(){
+  const parts = new Intl.DateTimeFormat('en-US-u-ca-persian', {year:'numeric', month:'numeric', day:'numeric'}).formatToParts(new Date());
+  const obj = {};
+  parts.forEach(p => { if(p.type !== 'literal') obj[p.type] = parseInt(p.value, 10); });
+  return { day: obj.day, month: obj.month, year: obj.year };
+}
+
+// ---- Build date selects ----
+const dayEl = document.getElementById('f-day');
+const monthEl = document.getElementById('f-month');
+const yearEl = document.getElementById('f-year');
+const today = getTodayJalali();
+
+for(let d = 1; d <= 31; d++){
+  const opt = document.createElement('option');
+  opt.value = d;
+  opt.textContent = toPersianDigits(d);
+  if(d === today.day) opt.selected = true;
+  dayEl.appendChild(opt);
+}
+PERSIAN_MONTHS.forEach((name, i) => {
+  const opt = document.createElement('option');
+  opt.value = i + 1;
+  opt.textContent = name;
+  if(i + 1 === today.month) opt.selected = true;
+  monthEl.appendChild(opt);
+});
+for(let y = today.year - 3; y <= today.year + 1; y++){
+  const opt = document.createElement('option');
+  opt.value = y;
+  opt.textContent = toPersianDigits(y);
+  if(y === today.year) opt.selected = true;
+  yearEl.appendChild(opt);
+}
+
+// ---- Build unit selects (1-9) ----
+const unitEl = document.getElementById('f-unit');
+const filterUnitEl = document.getElementById('filter-unit');
+for(let u = 1; u <= 9; u++){
+  const opt = document.createElement('option');
+  opt.value = u;
+  opt.textContent = "واحد " + toPersianDigits(u);
+  unitEl.appendChild(opt);
+
+  const fopt = document.createElement('option');
+  fopt.value = u;
+  fopt.textContent = "واحد " + toPersianDigits(u);
+  filterUnitEl.appendChild(fopt);
+}
+
+// ---- Amount choice toggle ----
+const amountFixed = document.getElementById('amount-fixed');
+const amountOther = document.getElementById('amount-other');
+const customBox = document.getElementById('custom-amount-box');
+const customInput = document.getElementById('f-amount-custom');
+
+function updateAmountBox(){
+  if(amountOther.checked){
+    customBox.classList.add('show');
+  } else {
+    customBox.classList.remove('show');
+  }
+}
+amountFixed.addEventListener('change', updateAmountBox);
+amountOther.addEventListener('change', updateAmountBox);
+
+// ---- Storage helpers ----
+// All data is saved locally on this device using the browser's localStorage.
+// Nothing is sent to any server.
+let entries = [];
+
+function saveEntries(){
+  try{
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(entries));
+    return true;
+  }catch(e){
+    console.error('storage error', e);
+    alert('ذخیره‌سازی با مشکل مواجه شد. لطفاً از حافظه‌ی گوشی مطمئن شوید و دوباره تلاش کنید.');
+    return false;
+  }
+}
+
+function loadEntries(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    entries = raw ? JSON.parse(raw) : [];
+    if(!Array.isArray(entries)) entries = [];
+  }catch(e){
+    entries = [];
+  }
+  render();
+}
+
+// ---- Form submit ----
+document.getElementById('entry-form').addEventListener('submit', function(e){
+  e.preventDefault();
+
+  let amount;
+  if(amountOther.checked){
+    amount = parseInt(customInput.value, 10);
+    if(!amount || amount <= 0){
+      customInput.focus();
+      return;
+    }
+  } else {
+    amount = 400000;
+  }
+
+  const type = document.querySelector('input[name="f-type"]:checked').value;
+  const unit = unitEl.value;
+  const day = dayEl.value;
+  const month = monthEl.value;
+  const year = yearEl.value;
+  const desc = document.getElementById('f-desc').value.trim();
+
+  const entry = {
+    id: Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+    day: parseInt(day, 10),
+    month: parseInt(month, 10),
+    year: parseInt(year, 10),
+    unit: parseInt(unit, 10),
+    amount,
+    type,
+    desc,
+    createdAt: Date.now()
+  };
+
+  entries.push(entry);
+  saveEntries();
+  render();
+
+  customInput.value = '';
+  document.getElementById('f-desc').value = '';
+});
+
+// ---- Delete entry ----
+function deleteEntry(id){
+  entries = entries.filter(en => en.id !== id);
+  saveEntries();
+  render();
+}
+
+filterUnitEl.addEventListener('change', render);
+
+// ---- Render ----
+function render(){
+  const filterVal = filterUnitEl.value;
+  const filtered = filterVal === 'all' ? entries : entries.filter(en => String(en.unit) === filterVal);
+
+  let sumDeposit = 0, sumWithdraw = 0;
+  filtered.forEach(en => {
+    if(en.type === 'deposit') sumDeposit += en.amount;
+    else sumWithdraw += en.amount;
+  });
+  document.getElementById('sum-deposit').textContent = formatAmount(sumDeposit);
+  document.getElementById('sum-withdraw').textContent = formatAmount(sumWithdraw);
+  document.getElementById('sum-balance').textContent = formatAmount(sumDeposit - sumWithdraw);
+
+  const listEl = document.getElementById('entries-list');
+  listEl.innerHTML = '';
+
+  if(filtered.length === 0){
+    listEl.innerHTML = '<div class="empty">هنوز تراکنشی ثبت نشده است.</div>';
+    return;
+  }
+
+  const sorted = [...filtered].sort((a, b) => b.createdAt - a.createdAt);
+
+  sorted.forEach(en => {
+    const div = document.createElement('div');
+    div.className = 'entry';
+    const dateStr = toPersianDigits(en.day) + ' ' + PERSIAN_MONTHS[en.month - 1] + ' ' + toPersianDigits(en.year);
+    div.innerHTML = `
+      <div class="entry-main">
+        <div class="entry-top">
+          <span class="entry-type ${en.type === 'deposit' ? 'deposit' : 'withdraw'}">${en.type === 'deposit' ? 'واریز' : 'برداشت'}</span>
+          <span class="entry-unit">واحد ${toPersianDigits(en.unit)}</span>
+          <span class="entry-date">${dateStr}</span>
+        </div>
+        ${en.desc ? `<div class="entry-desc">${escapeHtml(en.desc)}</div>` : ''}
+      </div>
+      <div style="display:flex; align-items:center; gap:10px;">
+        <div class="entry-amount ${en.type === 'deposit' ? 'deposit' : 'withdraw'}">${formatAmount(en.amount)}</div>
+        <button class="entry-del" data-id="${en.id}" title="حذف">حذف</button>
+      </div>
+    `;
+    listEl.appendChild(div);
+  });
+
+  listEl.querySelectorAll('.entry-del').forEach(btn => {
+    btn.addEventListener('click', () => deleteEntry(btn.getAttribute('data-id')));
+  });
+}
+
+function escapeHtml(str){
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ---- Backup export: Excel + JSON ----
+
+function downloadBlob(content, filename, mime){
+  try{
+    const blob = new Blob([content], {type: mime});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => {
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }, 1000);
+    return true;
+  }catch(err){
+    console.error('download error', err);
+    alert('دانلود فایل در این دستگاه پشتیبانی نمی‌شود.');
+    return false;
+  }
+}
+
+function htmlEscape(value){
+  return String(value ?? '')
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function exportExcel(){
+  const rows = [['تاریخ','واحد','مبلغ (تومان)','نوع','توضیحات']];
+  [...entries].reverse().forEach(en => {
+    rows.push([
+      `${en.day}/${en.month}/${en.year}`,
+      'واحد ' + en.unit,
+      en.amount,
+      en.type === 'deposit' ? 'واریز' : 'برداشت',
+      en.desc || ''
+    ]);
+  });
+
+  // Excel-compatible HTML spreadsheet; works offline and needs no CDN/library.
+  let table = '<table border="1"><thead><tr>';
+  rows[0].forEach(v => table += '<th>' + htmlEscape(v) + '</th>');
+  table += '</tr></thead><tbody>';
+
+  rows.slice(1).forEach(r => {
+    table += '<tr>';
+    r.forEach(v => table += '<td>' + htmlEscape(v) + '</td>');
+    table += '</tr>';
+  });
+  table += '</tbody></table>';
+
+  const excelHtml = `<!DOCTYPE html>
+<html dir="rtl"><head><meta charset="UTF-8">
+<style>td,th{padding:6px;border:1px solid #999}table{border-collapse:collapse}</style>
+</head><body>${table}</body></html>`;
+
+  const jt = getTodayJalali();
+  downloadBlob(
+    '\ufeff' + excelHtml,
+    `شارژ-ساختمان-شاهان-${jt.year}-${jt.month}-${jt.day}.xls`,
+    'application/vnd.ms-excel;charset=utf-8'
+  );
+}
+
+document.getElementById('export-btn').addEventListener('click', exportExcel);
+
+// Replace the old "JSON import" label with two actions: JSON download + JSON restore.
+const backupRow = document.querySelector('.backup-row');
+backupRow.innerHTML = `
+  <button type="button" class="backup-btn" id="export-excel-btn">دانلود اکسل</button>
+  <button type="button" class="backup-btn" id="export-json-btn">دانلود JSON</button>
+  <label class="backup-btn" for="import-file">بازیابی JSON</label>
+  <input type="file" id="import-file" accept="application/json,.json" style="display:none;">
+`;
+
+document.getElementById('export-excel-btn').addEventListener('click', exportExcel);
+
+document.getElementById('export-json-btn').addEventListener('click', () => {
+  const jt = getTodayJalali();
+  const json = JSON.stringify(entries, null, 2);
+  downloadBlob(
+    '\ufeff' + json,
+    `پشتیبان-شارژ-شاهان-${jt.year}-${jt.month}-${jt.day}.json`,
+    'application/json;charset=utf-8'
+  );
+});
+
+document.getElementById('import-file').addEventListener('change', function(e){
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(evt){
+    try{
+      const imported = JSON.parse(evt.target.result);
+      if(!Array.isArray(imported)) throw new Error('invalid format');
+      const existingIds = new Set(entries.map(en => en.id));
+      let added = 0;
+      imported.forEach(en => {
+        if(en && en.id && !existingIds.has(en.id)){
+          entries.push(en);
+          existingIds.add(en.id);
+          added++;
+        }
+      });
+      saveEntries();
+      render();
+      alert(`${toPersianDigits(added)} تراکنش از فایل پشتیبان اضافه شد.`);
+    }catch(err){
+      alert('این فایل با فرمت JSON پشتیبان قبلی سازگار نیست.');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+updateAmountBox();
+loadEntries();
+
+// ---- PWA: register service worker so the app works offline once installed ----
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('service-worker.js').catch(() => {});
+  });
+}
+</script>
+</body>
+</html>
